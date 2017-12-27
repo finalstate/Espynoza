@@ -47,7 +47,7 @@ Right now, the number of available hardware drivers is limited to simple digital
 
 *Remark*: this worked for me, your mileage may vary. Please drop me a note if you have problems, I will try to help, and amend these instructions.
 
-clone Espynoza from GitHub using this command:
+**Espinoza**: clone Espynoza from GitHub using this command:
 ```
 git clone https://github.com/finalstate/Espynoza.git
 ```
@@ -55,30 +55,31 @@ This will create a directory called Espynoza containig the Espynoza.py cli tool,
 
 Moreover you will need to install the following packages to use Espynoza. Install them in some convenient place on your disk, not into the Espinoza directory.
 
-MicroPython: the MicroPython language files, and its compiler. Install this using Github, and build the compiler yourself (the prebuild one provided for download is notoriously out of date, and your code will not work with it):
+**MicroPython**: the MicroPython language files, and its compiler. Install this using Github, and build the compiler yourself (the prebuild one provided for download is notoriously out of date, and your code will not work with it):
 ```
 git clone https://github.com/micropython/micropython.git
-cd micropython/bin
+cd micropython/mpy-cross
 make
 ```
 This will create the mpy-cross compiler executable. Open the file EspyConfig.py in the Espynoza root directory. There you will find the following line:
 ```
 C_MpyCross = './bin/mpy-cross'
 ```
-You may either change this to point to your brand-new compiler, or create the bin sub-directory and create a symbolic link to the compiler in this directory.
+You may either change this to point to your brand-new compiler, or create the bin sub-directory and create a symbolic link to the compiler in this directory (or use your own strategy, Espynoza is designed to be flexible).
 
 
-esptool: This tool is used to flash the target flash memory, and to upload the MicroPython firmware
+**esptool**: This tool is used to flash the target flash memory, and to upload the MicroPython firmware
 ```
 sudo pip3 install esptool
 ```
 
-ampy: This library is used to initially upload Python files to the target board. Install like this:
+**ampy**: This library is used to initially upload Python files to the target board. Install like this:
 ```
 sudo pip3 install adafruit-ampy
 ```
 
-Mosquitto: the MQTT broker used as a communication hub for Espynoza (and potentially many more sub-systems for your IoT installation)
+**Mosquitto**: the MQTT broker used as a communication hub for Espynoza (and potentially many more sub-systems for your IoT installation.)
+
 If you use Debian or Ubuntu, the following should work:
 
 ```
@@ -88,9 +89,9 @@ apt-get upgrade
 apt-get install mosquitto mosquitto-clients
 ```
 
-Please refer to the mosquitto documentation for configuration. the out-of-the-box config should be OK if you are happy without security settings...
+Please refer to the mosquitto documentation for configuration. The out-of-the-box config should be OK if you are happy without security settings...
 
-paho-mqtt: a Python library for using MQTT. Again, we install using pip:
+**paho-mqtt**: a Python library for using MQTT. Again, we install using pip:
 
 ```
 sudo pip3 install paho-mqtt
@@ -122,7 +123,9 @@ You need to get hold of an ESP6288 development board. Any board that has a USB p
 - dir name ESP is sub-optimal
 
 # Upcoming
+(help welcome :-) )
 
 * pip3 installer
 * custom firmware building support
+* https support for mqtt connections
 * cli commands: rename board, move target to another broker 
