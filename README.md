@@ -1,5 +1,5 @@
 # Remark:
-** Info will be completed a.s.a.p., if you happen to stumble on this project, feel free to use. **
+**Info will be completed a.s.a.p., if you happen to stumble on this project, feel free to use.**
 
 Please be patient, doc. will be worked on before first public announcement
 
@@ -25,20 +25,20 @@ Right now, the number of available hardware drivers is limited to simple digital
 
 # Download and Install
 ## Requirements
-- Hardware
--- Host computer
---- PC running : Linux (maybe others)
---- Raspberry running Linux (Ubuntu Jessie works)
--- target
---- ESP6288 
---- more to come
+* Hardware
+  * Host computer
+    * PC running : Linux (maybe others)
+    * Raspberry running Linux (Ubuntu Jessie works)
+  * Target
+    * ESP6288 
+    * more to come
 
-- Software packages
--- Micropython 
--- Mosquitto
--- ampy
--- esptools
--- (esp-open-sdk -- optional, needed to build custom runtimes)
+* Software packages
+  * Micropython 
+  * Mosquitto
+  * ampy
+  * esptools
+  * (esp-open-sdk -- optional, needed to build custom runtimes)
 
 ## Clone from GitHub
 
