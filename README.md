@@ -11,7 +11,7 @@ Espynoza supports remote uploading of files/sources via USB cable, or via Wifi/M
 
 All user actions are made through a command-line interface, *Espynoza.py* (use --help for details). Configuration is made via Python files (basically variable assignments). Configuration files exist on the global level, as well as for the individual target devices.
 
-The framework, running on the target device, handles initial connection to the Wifi network, and then establishes a connection with the specified MQTT broker. The host server may then send commands to the target device, using standard Python syntax, and will receive data produced on the target. The frameworks main loop calls (user-definable) handlers to perform actions such as setting outputs and reading sensor data. 
+The framework, running on the target device, handles initial connection to the Wifi network, and then establishes a connection with the specified MQTT broker. The host server may then send commands to the target device, using standard Python syntax, and will receive data produced on the target. The frameworks main loop calls (user-definable) handlers to perform actions such as setting outputs and reading sensor data. A wachdog will reboot the target if the board hangs.
 
 Right now, some simple sample handlers are provided with Espynoza, more will follow soon. The aim is to create a library that will allow the user to build a system by writing a configuration file for simple cases, but that may be extended by writing small code fragments in Python for more special cases.
 
@@ -145,6 +145,7 @@ Make a copy of file Newbie.py, name it Tutorial.py. That's to say, use the board
 **C_DNS, C_Gateway, C_NetMask**: change if necessary so it fits your network
 
 **C_Hotspot**: enter the name of your Hotspot. If you leave this empty, the target will scan the Ether for Hotspots and try to use those found, one by one, starting with the strongest, until a connection works. Of course, you will then need to set the password for the '' Hotspot in the *<Demo>DeviceList.py* file, and booting the board will take longer. Also, more RAM will be used. But hey, it will work, and having multiple access points for redundancy, or better coverage, has also its advantages. (Btw, right now, all access points must have the same password. Stay tuned...)
+
 **C_Handlers:** we will configure our IO here. Insert the following lines:
 ```python
 C_Handlers       = {
@@ -154,23 +155,23 @@ C_Handlers       = {
 ```
 Now, what does this mean. Lets see item by item. 
 
-*DigitalOut* and *DigitalIn* are handler names. Think of them as drivers for your input and out put devices. If you are curious, see the files DigitalOut.py and digitalIn.py in the *usr/* directory.
+*DigitalOut* and *DigitalIn* are handler names. Think of them as drivers for your input and output devices. If you are curious, see the files *DigitalOut.py* and *DigitalIn.py* in the *usr/* directory.
 
 The 'Period' parameter indicates how often the output handler should be called. It is the number of milliseconds that the target should wait between two calls to the handlers 'periodic' method. The *DigitalOut* handler will blink the Led we connected every 500 ms (250 ms between individual togglings), and the *DigitalIn* pin will be read evers millisecond.
 
-Next, we hate the Parameters. These are different for all handlers, see the source file of the given Handler for a description. For *DigitalOut*, they are: The pin name to use, and if the Led should blink. We will see later what else that blinking we can do with this handler. *DigitalIn*s first parameter is also the pin name. The second parameter is used for debouncing, any changes shorter than this interval (in milliseconds) will be ignored.
+Next, we have the Parameters. These are different for all handlers, see the source file of the given Handler for a description. For *DigitalOut*, they are: The pin name to use, and if the Led should blink. We will see later what else than blinking we can do with this handler. *DigitalIn*s first parameter is also the pin name. The second parameter is used for debouncing, any changes happening at intervals (in milliseconds) shorter than this will be ignored.
 
 **C_Pins**:
+Finally, we need to define our pins:
 ```
 # (Pin, direction: 0=IN | 1=OUT, Pull: 1=PULL_UP | None=None)
 C_Pins          = {
                     'Led'  : (0,  1),  
-                    
                     'Wire' : (1,  0, None),
                   }
 ```
 
-This dictionaries key is the name of the Pin, as we used above. The first parameter is the pin number. Here, we use the Espressif numbering, nothte Dx stuff from the Arduino world. The second parameter defines if the pin is used as an Input or as an Output. Finally, the 'Wire' input pin has a third value which indicates whether it is configured as a PULL_UP input or not.
+This dictionaries keys are the names of the Pins, as we used them above. The first parameter is the pin number. Here, we use the Espressif numbering, not the Dx stuff from the Arduino world. The second parameter defines if the pin is used as an Input or as an Output. Finally, the 'Wire' input pin has a third value which indicates whether it is configured as a PULL_UP input or not.
 
 And this concludes the configuration of our target. Next, we need to get it on our target, and then we may finally play with it.
 
