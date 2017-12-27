@@ -1,21 +1,23 @@
 # Remark:
 **Info will be completed a.s.a.p., but if you happen to stumble on this project, feel free to use.**
 
+
 Please be patient, doc. will be worked on before first public announcement
 
 # Introduction
+Espynoza is a framework for writing, configuring and managing applications on ESP8266 microcontroler boards.
 
-Espynoza
+Espynoza supports remote uploading of files/sources via USB cable, or via Wifi/MQTT once the basic software is installed. Multiple MQTT servers may be configured as well as distinct Wifi Hotspots. 
 
-iot framework -> handler based, mqtt-based
+All user actions are made through a command-line interface, *Espynoza.py* (use --help for details). Configuration is made via python files (basically variable assignments). Configuration files exist on the global level, as well as for the individual target devices.
 
-Watchdog
-build (multiple) runtime
-easy configuration
-highly configurable
-low footprint
-rapid development cycle
+The framework, running on the target device, handles initial connection to the Wifi network, and then establishes a connection with the specified MQTT broker. The host server may then send commands to the target device, using standard Python syntax, and will receive data produced on the target. The frameworks main loop calls (user-definable) handlers to perform actions such as setting outputs and reading sensor data. 
 
+Sample handlers are provided with Espynoza, more will follow soon. The aim is to create a library that will allow the user to simply build a system by writing a configuration file for simple cases, but that may be extended simply by writing small code fragments in Python for more special cases.
+
+Special care has been been taken to use as less memory as possible on the target devices. Python files may be compiled on the host system before being uploaded to avoid out of memory conditions during system startup. Only the files needed for the targets configuration are loaded into RAM.
+
+(In case you wonder why some things are designed the way they are, I plan to write a web/database-based application to make using Espynozas easier. But first things first...) 
 
 ## Version
 Current version is 0.1, the initial commit.
@@ -48,7 +50,7 @@ Right now, the number of available hardware drivers is limited to simple digital
 Here is a simple tutorial to get you started with Espynoza. First, we will set up some basic hardware, and then install the software on it to get a feeling for how Espinoza works and what it can do for us.
 
 ## Hardware setup
-You need to get hold of an ESP6288 development board. Any board that has a USB port for uploading will work. We will, for the purpose of this tutorial, connect an LED to Port xxx to play with output lines, and a simple wire to Port yyy to try out input lines. Please note that we will use the Dnn numbering scheme as printed on (most?) boards when dealing with hardware, but will use the pin numbers as used in the official ESP documentation when writing software.
+You need to get hold of an ESP6288 development board. Any board that has a USB port for uploading should work. We will, for the purpose of this tutorial, connect an LED to Port xxx to play with output lines, and a simple wire to Port yyy to try out input lines. Please note that we will use the Dnn numbering scheme as printed on (most?) boards when dealing with hardware, but will use the pin numbers as used in the official ESP documentation when writing software.
 
 ## Software configuration
 ## Running it
