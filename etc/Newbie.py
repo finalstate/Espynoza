@@ -11,12 +11,12 @@ C_ChunkSize      = 256*8
 C_ConnectTO      = 15
 C_WatchdogTO     = 60
                  
-C_LoopDelay      = 0.005
+C_LoopDelay      = 0.001
 
 # MQTT server     
 C_BrokerIP       = ''
 C_BrokerPort     = 0
-C_BrokerQoS      = 1
+C_BrokerQoS      = 0
 C_BrokerSubPat   = 'esp/{ClientId}/cmd'
 C_BrokerPubPat   = 'sensors/esp/{ClientId}/{Name}'
 

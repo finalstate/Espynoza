@@ -36,7 +36,7 @@ C_Handlers       = {
                                    },
                    }
 
-    # (Pin, direction: 0=IN | 1=OUT, Pull: 1=PULL_UP | None=None)
+# (Pin, direction: 0=IN | 1=OUT, Pull: 1=PULL_UP | None=None)
 C_Pins           = {
                       'OneWire'   : ( 0, 1),  
                     

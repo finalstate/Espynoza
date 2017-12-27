@@ -13,31 +13,30 @@ All user actions are made through a command-line interface, *Espynoza.py* (use -
 
 The framework, running on the target device, handles initial connection to the Wifi network, and then establishes a connection with the specified MQTT broker. The host server may then send commands to the target device, using standard Python syntax, and will receive data produced on the target. The frameworks main loop calls (user-definable) handlers to perform actions such as setting outputs and reading sensor data. 
 
-Some simple sample handlers are provided with Espynoza, more will follow soon. The aim is to create a library that will allow the user to build a system by writing a configuration file for simple cases, but that may be extended simply by writing small code fragments in Python for more special cases.
+Right now, some simple sample handlers are provided with Espynoza, more will follow soon. The aim is to create a library that will allow the user to build a system by writing a configuration file for simple cases, but that may be extended by writing small code fragments in Python for more special cases.
 
 Special care has been been taken to use as little memory as possible on the target devices. Python files may be compiled on the host system before being uploaded to avoid out of memory conditions during system startup. Only the files needed for the targets configuration are loaded into RAM.
 
 (BTW, in case you wonder why some things are designed the way they are, I plan to write a web/database-based application to make using Espynoza easier. But first things first...) 
 
 ## Version
-Current version is 0.1, the initial commit.
+Current version is *0.1*, the initial commit.
 This version should be considered alpha quality, even though the code should work if Espynoza and all needed libraries and tools are installed correctly.
-Right now, the number of available hardware drivers is limited to simple digital and analog IO, as well as some I2C or similar serial communication protocol devices. More will follow as soon as the basic code is stable.
-
+Right now, the number of available handlers is limited to simple digital and analog IO, as well as some I2C or similar serial communication protocol devices. More will follow as soon as the basic code is stable.
 
 # Download and Install
 ## Requirements
 * Hardware
   * Host computer
-    * PC running Linux (maybe others)
-    * or Raspberry running Linux (Ubuntu Jessie works)
-    * Python >= 3.6 (format strings are used)
+    * PC running Linux (maybe other OS)
+    * or a Raspberry Pi running Linux (Ubuntu Jessie works)
+    * Python >= 3.6 (3.6 minimum, as format strings are used)
   * Target
     * ESP6288 
-    * more to come
+    * (more to come)
 
 * Software packages
-  * Micropython 
+  * MicroPython 
   * Mosquitto (and paho-mqtt)
   * ampy (from Adafruit)
   * esptool.py
@@ -45,7 +44,7 @@ Right now, the number of available hardware drivers is limited to simple digital
 
 ## Clone from GitHub
 
-*Remark*: this worked for me, your mileage may vary. Please drop me a note if you have problems, I will try to help, and amend these instructions.
+*Remark*: the following instructions worked for me, your mileage may vary. Please drop me a note if you have problems, I will try to help, and amend these instructions.
 
 **Espinoza**: clone Espynoza from GitHub using this command:
 ```
@@ -78,7 +77,7 @@ sudo pip3 install esptool
 sudo pip3 install adafruit-ampy
 ```
 
-**Mosquitto**: the MQTT broker used as a communication hub for Espynoza (and potentially many more sub-systems for your IoT installation.)
+**Mosquitto**: the MQTT broker used as a communication hub for Espynoza (and potentially many more sub-systems of your IoT installation.)
 
 If you use Debian or Ubuntu, the following should work:
 
@@ -89,7 +88,7 @@ apt-get upgrade
 apt-get install mosquitto mosquitto-clients
 ```
 
-Please refer to the mosquitto documentation for configuration. The out-of-the-box config should be OK if you are happy without security settings...
+Please refer to the mosquitto documentation for configuration and usage. The out-of-the-box config should be OK if you are happy without security settings...
 
 **paho-mqtt**: a Python library for using MQTT. Again, we install using pip:
 
@@ -108,6 +107,73 @@ Here is a simple tutorial to get you started with Espynoza. First, we will set u
 You need to get hold of an ESP6288 development board. Any board that has a USB port for uploading should work. We will, for the purpose of this tutorial, connect an LED to Port xxx to play with output lines, and a simple wire to Port yyy to try out input lines. Please note that we will use the Dnn numbering scheme as printed on (most?) boards when dealing with hardware, but will use the pin numbers as used in the official ESP documentation when writing software.
 
 ## Software configuration
+Lets try to keep this simple for now. EspyConfig.py should be OK for this tutorial if you don have done anything special during installation. Let go into the *etc/* sub-directory. There, we find a file called *DemoDeviceList.py*. (We may use it as is, or we may make a copy of it that we call *DeviceList.py*, The later will be used if it exists. Do this if you do not want to run into problems when pulling the newest Espinoza library).
+
+Open this file in your prefered text editor. It contains the configuration of your IoT installation as a whole. Later on, we will see how an individual target device is configured. We will need to make some changes in this file, specifically the Wifi and MQTT settings, and the basic settings of our target devices.
+
+So, lets start with WiFi setup. In this tutorial, we will suppose that you have a single Wifi router. Uncomment the following line (leave the first one as is, it doesn't bother us right now), and change the name of the Hotspot and the Password to your settings:
+```python
+C_WifiPasswords    =    { 
+                          ''           : ('**PWD**' ),
+                         
+#                          'HotSpot1'  : ('**PWD**' ),
+                        }
+```
+
+If your MQTT broker is configured to use a login and password, comment he first line, and uncomment the second one. Change the IP address you see to the one used by your MQTT broker. Change login and password if appropriate.
+```python
+C_MQTTCredentials  =    { 
+                          '192.168.1.99'  : (None,   None     ),
+#                          '192.168.1.98' : ('esp', '*******' ),
+                        }
+```
+
+And finally, we need to add our target to the device descriptor. Copy one of the linesn and modify it like this:
+```python
+C_DeviceDescriptor =    { 
+                           'Tutorial'  : ('192.168.1.42',   '192.168.1.99', 'Tutorial board'                        ),
+                           
+                           'SimpleIO'  : ('192.168.1.100',  '192.168.1.99', 'Digital I/O and single-wire temp'      ), #
+                        ...
+```                        
+Change the dictionaries Key tot he name you want ot give to your board. Find an address in your LAN that is not used, here, I used 192.168.1.42. The second quad.dot.address is the address of the broker this particular board uses, change it to the one you used above. Finally, there is a string describing the board, change it to whatever you like, it is currently only used for documentation purposes.
+
+Save the file, it should be OK for now. But we are not done yet with the configuration...
+
+Make a copy of file Newbie.py, name it Tutorial.py. That's to say, use the board name you defined in the <Demo>DeviceList.py file. Open this file in your editor, and change the following items:
+
+**C_DNS, C_Gateway, C_NetMask**: change if necessary so it fits your network
+
+**C_Hotspot**: enter the name of your Hotspot. If you leave this empty, the target will scan the Ether for Hotspots and try to use those found, one by one, starting with the strongest, until a connection works. Of course, you will then need to set the password for the '' Hotspot in the *<Demo>DeviceList.py* file, and booting the board will take longer. Also, more RAM will be used. But hey, it will work, and having multiple access points for redundancy, or better coverage, has also its advantages. (Btw, right now, all access points must have the same password. Stay tuned...)
+**C_Handlers:** we will configure our IO here. Insert the following lines:
+```python
+C_Handlers       = {
+                     'DigitalOut': { 'Period' : 250,   'Params' : (('Led',    True ), ) }
+                     'DigitalIn' : { 'Period' :    1,  'Params' : (('Wire',    500 ), ) },
+                   }
+```
+Now, what does this mean. Lets see item by item. 
+
+*DigitalOut* and *DigitalIn* are handler names. Think of them as drivers for your input and out put devices. If you are curious, see the files DigitalOut.py and digitalIn.py in the *usr/* directory.
+
+The 'Period' parameter indicates how often the output handler should be called. It is the number of milliseconds that the target should wait between two calls to the handlers 'periodic' method. The *DigitalOut* handler will blink the Led we connected every 500 ms (250 ms between individual togglings), and the *DigitalIn* pin will be read evers millisecond.
+
+Next, we hate the Parameters. These are different for all handlers, see the source file of the given Handler for a description. For *DigitalOut*, they are: The pin name to use, and if the Led should blink. We will see later what else that blinking we can do with this handler. *DigitalIn*s first parameter is also the pin name. The second parameter is used for debouncing, any changes shorter than this interval (in milliseconds) will be ignored.
+
+**C_Pins**:
+```
+# (Pin, direction: 0=IN | 1=OUT, Pull: 1=PULL_UP | None=None)
+C_Pins          = {
+                    'Led'  : (0,  1),  
+                    
+                    'Wire' : (1,  0, None),
+                  }
+```
+
+This dictionaries key is the name of the Pin, as we used above. The first parameter is the pin number. Here, we use the Espressif numbering, nothte Dx stuff from the Arduino world. The second parameter defines if the pin is used as an Input or as an Output. Finally, the 'Wire' input pin has a third value which indicates whether it is configured as a PULL_UP input or not.
+
+And this concludes the configuration of our target. Next, we need to get it on our target, and then we may finally play with it.
+
 ## Running it
 ## Troubleshooting
 
@@ -128,4 +194,6 @@ You need to get hold of an ESP6288 development board. Any board that has a USB p
 * pip3 installer
 * custom firmware building support
 * https support for mqtt connections
-* cli commands: rename board, move target to another broker 
+* cli commands: rename board, move target to another broker
+
+* ESP32 support (if and when MicroPython supports the stuff needed)
