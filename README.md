@@ -1,5 +1,5 @@
 # Remark:
-**Info will be completed a.s.a.p., if you happen to stumble on this project, feel free to use.**
+**Info will be completed a.s.a.p., but if you happen to stumble on this project, feel free to use.**
 
 Please be patient, doc. will be worked on before first public announcement
 
