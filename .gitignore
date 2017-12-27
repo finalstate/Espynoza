@@ -1,0 +1,16 @@
+.directory
+
+#lib/__pycache__/*
+
+*/*mpy
+
+# do not include, as it contains passwwords and other sensitive data. Include DemoDeviceList.py instead
+etc/DeviceList.py
+
+__pycache__
+*/**/__pycache__
+
+bin/*
+
+*kate-swp
+*/*kate-swp
