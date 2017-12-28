@@ -29,21 +29,25 @@ C_Handlers       = {
                      'PwmOut'     : { 'Period' : None,  'Params' : (('Green',                 ), ) },
                     }
 
-# (Pin, direction: 0=IN | 1=OUT, Pull: 1=PULL_UP | None=None)
+# Pin  : ESP pin id, 
+# Mode : 0=IN | 1=OUT | 2=OPEN_DRAIN, 
+# Value: if  IN: 1=PULL_UP | None=None)
+#        if OUT: 0=OFF | 1=ON | None=leave (default state)
+
 C_Pins            = {
-                      'OneWire'   : (0,  1),  
+                      'OneWire'   : (0,  1, None),  
                                   
                       'Button1'   : (1,  0, None),
                       'Button2'   : (3,  0, None),
                                          
-                      'SDA'       : (4,  1),  
-                      'SCL'       : (5,  1),  
+                      'SDA'       : (4,  1, None),  
+                      'SCL'       : (5,  1, None),  
                                          
-                      'Dimmer'    : (12, 1),  
+                      'Dimmer'    : (12, 1, None),  
                                   
-                      'Red'       : (14, 1),  
-                      'Green'     : (12, 1),  
-                      'Blue'      : (13, 1),  
+                      'Red'       : (14, 1, None),  
+                      'Green'     : (12, 1, None),  
+                      'Blue'      : (13, 1, None),  
                                     
                       'Touch'     : (15, 0, None),  
                     }

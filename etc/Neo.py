@@ -18,8 +18,12 @@ C_Handlers       = {
                      'NeoGen'    : { 'Period' : 1,  'Params' : (('Neo', 300, 'NeoRun', 3      ), ) },
                    }
 
-# (Pin, direction: 0=IN | 1=OUT, Pull: 1=PULL_UP | None=None)
+# Pin  : ESP pin id, 
+# Mode : 0=IN | 1=OUT | 2=OPEN_DRAIN, 
+# Value: if  IN: 1=PULL_UP | None=None)
+#        if OUT: 0=OFF | 1=ON | None=leave (default state)
+
 C_Pins           = {
-                     'Neo'   : (0, 1),  
+                     'Neo'   : (0, 1, None),  
                    }
         

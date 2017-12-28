@@ -214,7 +214,10 @@ class User:
             if l_PinSpec[1] == 0: # i.e. an input
                 l_Pin  = machine.Pin(l_PinSpec[0], l_PinSpec[1], l_PinSpec[2])
             else:
-                l_Pin  = machine.Pin(l_PinSpec[0], l_PinSpec[1])
+                if l_PinSpec[2] is None:
+                    l_Pin  = machine.Pin(l_PinSpec[0], l_PinSpec[1])
+                else:
+                    l_Pin  = machine.Pin(l_PinSpec[0], l_PinSpec[1], value=l_PinSpec[2])
             l_PinList[l_Name] = l_Pin
             
         del Config.C_Pins

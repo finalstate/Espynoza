@@ -22,12 +22,16 @@ C_Handlers       = {
                                    },
                    }
 
-# (Pin, direction: 0=IN | 1=OUT, Pull: 1=PULL_UP | None=None)
+# Pin  : ESP pin id, 
+# Mode : 0=IN | 1=OUT | 2=OPEN_DRAIN, 
+# Value: if  IN: 1=PULL_UP | None=None)
+#        if OUT: 0=OFF | 1=ON | None=leave (default state)
+
 C_Pins          = {
-                    'OneWire' : ( 0,  1), 
+                    'OneWire' : ( 0,  1, None), 
                     
-                    'SDA'     : ( 4,  1),  
-                    'SCL'     : ( 5,  1),  
+                    'SDA'     : ( 4,  1, None),  
+                    'SCL'     : ( 5,  1, None),  
 
                     'RadarIn' : (14,  0, None),  
                   }
