@@ -13,7 +13,7 @@ C_MQTTCredentials  =    {
 C_DeviceDescriptor =    { 
                          # Target      : (Config,      IP Address       Broker          Description                             ),
 
-                           'SimpleIO'  : ('SimpleIO',  '192.168.1.100', '192.168.1.99', 'Blink, temperature and rotary encoder' ),
+                           'SimpleIO'  : ('SimpleIO',  '192.168.1.100', '192.168.1.99', 'Blink and rotary encoder'              ),
                            'SimpleIO2' : ('SimpleIO2', '192.168.1.101', '192.168.1.99', 'Digital I/O and single-wire temp'      ),
                                                        
                            'Dimmer'    : ('Dimmer',    '192.168.1.102', '192.168.1.99', 'Dimmer with PWM'                       ),

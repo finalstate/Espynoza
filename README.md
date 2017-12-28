@@ -131,12 +131,13 @@ C_MQTTCredentials  =    {
 And finally, we need to add our target to the device descriptor. Copy one of the linesn and modify it like this:
 ```python
 C_DeviceDescriptor =    { 
-                           'Tutorial'  : ('Tutorial', '192.168.1.42',   '192.168.1.99', 'Tutorial board'                        ),
-                                                    , 
-                           'SimpleIO'  : ('SimpleIO', '192.168.1.100',  '192.168.1.99', 'Digital I/O and single-wire temp'      ),
+                         # Target      : (Config,      IP Address       Broker           Description               ),
+                           'Tutorial'  : ('Tutorial', '192.168.1.42',   '192.168.1.99', 'Tutorial board'           ),
+                           
+                           'SimpleIO'  : ('SimpleIO',  '192.168.1.100', '192.168.1.215', 'Blink and rotary encoder'),
                         ...
 ```                        
-Change the dictionaries yey to the name you want to give to your board. The associated parameter list begins with the name of the target configuration that we will define below. Here, we give it the same name as the target, but if you have several targets that use the same configuration (such as temperature sensors in different rooms), you may use different target board names, and reuse the same configuration file. Then, find an address in your LAN that is not used, here, I used 192.168.1.42. The second quad.dot.address is the address of the broker this particular board uses, change it to the one you used above. Finally, there is a string describing the board, change it to whatever you like, it is currently only used for documentation purposes.
+Change the dictionaries key to the name you want to give to your board. The associated parameter list begins with the name of the target configuration that we will define below. Here, we give it the same name as the target, but if you have several targets that use the same configuration (such as temperature sensors in different rooms), you may use different target board names, and reuse the same configuration file. Then, find an address in your LAN that is not used, here, I used 192.168.1.42. The second quad.dot.address is the address of the broker this particular board uses, change it to the one you used above. Finally, there is a string describing the board, change it to whatever you like, it is currently only used for documentation purposes.
 
 Save the file, it should be OK for now. But we are not done yet with the configuration...
 
