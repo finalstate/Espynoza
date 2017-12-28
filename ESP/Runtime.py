@@ -229,7 +229,9 @@ class User:
             l_HandlerClass.__init__ = None
 
             g_Watchdog.touch()
-            
+        
+        User.Handlers = Config.C_Handlers
+        
 #########################
 
     def loop(self):
