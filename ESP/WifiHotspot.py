@@ -17,7 +17,7 @@ class Wifi:
             
         self.f_Wifi = network.WLAN(network.STA_IF)
         self.f_Wifi.active(True )
-        self.f_Wifi.ifconfig((Config.C_IP, Config.C_NetMask, Config.C_Gateway, Config.C_DNS))
+        self.f_Wifi.ifconfig((Config.C_IP, Config.C_Netmask, Config.C_Gateway, Config.C_DNS))
         
         if not self.f_Wifi.isconnected():            
             while True:        

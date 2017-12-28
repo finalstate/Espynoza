@@ -122,9 +122,10 @@ class MQTT:
         self.f_Id     = Config.C_ClientId
         self.f_QoS    = Config.C_BrokerQoS
         try:
+            l_Broker = Config.C_BrokerIP.split(':')
             self.f_MQTTClient = mqtt.MQTTClient( b"esp_{}".format(self.f_Id), 
-                                                 Config.C_BrokerIP,                 port     = Config.C_BrokerPort,
-                                                 user      = Config.C_BrokerUser,   password = Config.C_BrokerPassword, 
+                                                 l_Broker[0],                     port     = l_Broker[0] if (len(l_Broker) > 1) else 0,
+                                                 user      = Config.C_BrokerUser, password = Config.C_BrokerPassword, 
                                                  keepalive = Config.C_WatchdogTO
                                                )
             self.f_MQTTClient.set_last_will(topic=Config.C_BrokerPubPat.format(ClientId=self.f_Id, Name='Bye'), msg=b"\0\0\0\0Crash", qos=self.f_QoS) 

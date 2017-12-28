@@ -1,21 +1,10 @@
-C_IP             = ''
-C_DNS            = '192.168.1.1' 
-C_Gateway        = '192.168.1.1'
-C_NetMask        = '255.255.255.0'
-                 
-C_Hotspot        = 'NSA'
-                 
-C_ClientId       = 'Newbie'
-C_ChunkSize      = 256*16
-
 C_ConnectTO      = 15
 C_WatchdogTO     = 60
                  
 C_LoopDelay      = 0.0001
+C_ChunkSize      = 256*16
 
 # MQTT server     
-C_BrokerIP       = ''
-C_BrokerPort     = 0
 C_BrokerQoS      = 1
 C_BrokerSubPat   = 'esp/{ClientId}/cmd'
 C_BrokerPubPat   = 'sensors/esp/{ClientId}/{Name}'
@@ -29,7 +18,7 @@ C_Handlers       = {
                      'NeoGen'    : { 'Period' : 1,  'Params' : (('Neo', 300, 'NeoRun', 3      ), ) },
                    }
 
-# (Pin, direction: 0=In, 1=Out)
+# (Pin, direction: 0=IN | 1=OUT, Pull: 1=PULL_UP | None=None)
 C_Pins           = {
                      'Neo'   : (0, 1),  
                    }

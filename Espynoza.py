@@ -5,7 +5,6 @@
 import argparse
 import datetime
 import os
-import re
 import subprocess
 import sys
 import time
@@ -106,20 +105,23 @@ def getHandlerList(p_ConfigName):
                       
 ####################################################################################################
 
-def prepareConfig(p_DeviceName, p_Target):    
+def prepareConfig(p_DeviceName,):   
+    l_Target = DeviceList.C_DeviceDescriptor[p_DeviceName]
     with open(f'etc/{p_DeviceName}.py', 'r') as l_ConfigTemplate:
         l_ConfigFileContent = l_ConfigTemplate.read()
 
-    l_ConfigFileContent = re.sub ("C_ClientId .*", f"C_ClientId = '{p_DeviceName}'", l_ConfigFileContent)
-    l_ConfigFileContent = re.sub ("C_IP .*",       f"C_IP       = '{p_Target[1] }'", l_ConfigFileContent)
-    l_ConfigFileContent = re.sub ("C_BrokerIP .*", f"C_BrokerIP = '{p_Target[2] }'", l_ConfigFileContent)
-
-    l_Broker      = p_Target[2]
-    l_Credentials = DeviceList.C_MQTTCredentials[l_Broker]
-
-    l_ConfigFileContent += "\n"
-    l_ConfigFileContent += f"C_BrokerUser     = '{l_Credentials[0]}'\n"
-    l_ConfigFileContent += f"C_BrokerPassword = '{l_Credentials[1]}'\n"
+    l_Configs = [l_ConfigFileContent]
+    l_Configs.append(f"""C_ClientId = '{p_DeviceName}'""")
+    l_Configs.append(f"""C_Hotspot  = '{l_Target[1]}'""")
+    l_Configs.append(f"""C_IP       = '{l_Target[2]}'""")
+    l_Configs.append(f"""C_DNS      = '{DeviceList.C_Network["DNS"    ]}'""")
+    l_Configs.append(f"""C_Gateway  = '{DeviceList.C_Network["Gateway"]}'""")
+    l_Configs.append(f"""C_Netmask  = '{DeviceList.C_Network["Netmask"]}'""")
+    
+    l_Credentials = DeviceList.C_MQTTCredentials[l_Target[3]]
+    l_Configs.append(f"""C_BrokerIP       = '{l_Target[3]}'""")
+    l_Configs.append(f"""C_BrokerUser     = '{l_Credentials[0]}'""")
+    l_Configs.append(f"""C_BrokerPassword = '{l_Credentials[1]}'""")
     
     # now, this is UGLY
     for l_Line in l_ConfigFileContent:
@@ -129,10 +131,11 @@ def prepareConfig(p_DeviceName, p_Target):
     l_HotSpot  = l_Line.replace('C_Hotspot','').replace('=','').strip().strip("'")
     l_Password = DeviceList.C_WifiPasswords[l_HotSpot]
 
-    l_ConfigFileContent += f"C_Password = '{l_Password}'\n"
+    l_Configs.append(f"""C_Password = '{l_Password}'""")
+
     
     with open(os.path.join(EspyConfig.C_TmpDirectory, 'Config.py'), 'w') as l_TempConfig:
-        l_TempConfig.write(l_ConfigFileContent)
+        l_TempConfig.write('\n'.join(l_Configs))
         
 ####################################################################################################
 
@@ -339,7 +342,7 @@ if __name__ == '__main__':
     if g_Arguments.broker:
         l_Broker = g_Arguments.broker
     else:
-        l_Broker = DeviceList.C_DeviceDescriptor[g_Arguments.target][2]
+        l_Broker = DeviceList.C_DeviceDescriptor[g_Arguments.target][3]
         
     if g_Arguments.verbose:
         print (f'Broker: {l_Broker}')
@@ -396,7 +399,7 @@ if __name__ == '__main__':
 ###
     if g_Arguments.base:
         l_Compile = not g_Arguments.source
-        prepareConfig(g_Arguments.target, DeviceList.C_DeviceDescriptor[g_Arguments.target])
+        prepareConfig(g_Arguments.target)
         
         print (  'Main                 : ', end='')
         sendFile('ESP/main.py', 'main.py', False) #never compile this
@@ -412,7 +415,7 @@ if __name__ == '__main__':
         resetTarget()
 ###
     if g_Arguments.configure:
-        prepareConfig(g_Arguments.target, DeviceList.C_DeviceDescriptor[g_Arguments.target])
+        prepareConfig(g_Arguments.target)
         
         print (  'Config  : ', end='')
         l_Answer = sendFile(os.path.join(EspyConfig.C_TmpDirectory, 'Config.py'), '/Config.py', not g_Arguments.source)

@@ -1,21 +1,10 @@
-C_IP             = ''
-C_DNS            = '192.168.1.1' 
-C_Gateway        = '192.168.1.1'
-C_NetMask        = '255.255.255.0'
-                 
-C_Hotspot        = ''
-                 
-C_ClientId       = 'Newbie'
-C_ChunkSize      = 256*8
-
 C_ConnectTO      = 15
 C_WatchdogTO     = 60
                  
 C_LoopDelay      = 0.001
+C_ChunkSize      = 256*8
 
 # MQTT server     
-C_BrokerIP       = ''
-C_BrokerPort     = 0
 C_BrokerQoS      = 0
 C_BrokerSubPat   = 'esp/{ClientId}/cmd'
 C_BrokerPubPat   = 'sensors/esp/{ClientId}/{Name}'
@@ -27,7 +16,7 @@ C_LogFile        = ''
 C_Handlers       = {
                    }
 
-# (Pin, direction: 0=In, 1=Out)
+# (Pin, direction: 0=IN | 1=OUT, Pull: 1=PULL_UP | None=None)
 C_Pins           = {
                    }
         

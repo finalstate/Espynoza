@@ -114,39 +114,41 @@ Open this file in your prefered text editor. It contains the configuration of yo
 So, lets start with WiFi setup. In this tutorial, we will suppose that you have a single Wifi router. Uncomment the following line (leave the first one as is, it doesn't bother us right now), and change the name of the Hotspot and the Password to your settings:
 ```python
 C_WifiPasswords    =    { 
-                          ''           : ('**PWD**' ),
+                          ''         : '**PWD**',
                          
-#                          'HotSpot1'  : ('**PWD**' ),
+#                         'HotSpot1' : '**PWD**',
                         }
 ```
 
 If your MQTT broker is configured to use a login and password, comment he first line, and uncomment the second one. Change the IP address you see to the one used by your MQTT broker. Change login and password if appropriate.
 ```python
 C_MQTTCredentials  =    { 
-                          '192.168.1.99'  : (None,   None     ),
-#                          '192.168.1.98' : ('esp', '*******' ),
+                          '192.168.1.99' : (None,   None     ),
+#                         '192.168.1.98' : ('esp', '*******' ),
                         }
 ```
 
 And finally, we need to add our target to the device descriptor. Copy one of the linesn and modify it like this:
 ```python
 C_DeviceDescriptor =    { 
-                         # Target      : (Config,      IP Address       Broker           Description               ),
-                           'Tutorial'  : ('Tutorial', '192.168.1.42',   '192.168.1.99', 'Tutorial board'           ),
-                           
-                           'SimpleIO'  : ('SimpleIO',  '192.168.1.100', '192.168.1.215', 'Blink and rotary encoder'),
+                         # Target     : (Config,      AP, IP Address,      Broker,          Description                ),
+                           'Tutorial' : ('Tutorial',  '', '192.168.1.42',   '192.168.1.99', 'Tutorial board'           ),
+                                                       
+                           'SimpleIO' : ('SimpleIO',  '', '192.168.1.100', '192.168.1.215', 'Blink and rotary encoder' ),
                         ...
-```                        
-Change the dictionaries key to the name you want to give to your board. The associated parameter list begins with the name of the target configuration that we will define below. Here, we give it the same name as the target, but if you have several targets that use the same configuration (such as temperature sensors in different rooms), you may use different target board names, and reuse the same configuration file. Then, find an address in your LAN that is not used, here, I used 192.168.1.42. The second quad.dot.address is the address of the broker this particular board uses, change it to the one you used above. Finally, there is a string describing the board, change it to whatever you like, it is currently only used for documentation purposes.
+```
+Change the dictionaries key to the name you want to give to your board. The associated parameter list begins with the name of the target configuration that we will define below. Here, we give it the same name as the target, but if you have several targets that use the same configuration (such as temperature sensors in different rooms), you may use different target board names, and reuse the same configuration file. Next comes the SSID name of the Access Point you want the device to connect to. Then, find and enter an address in your LAN that is not used, here, I used 192.168.1.42. The second quad.dot.address is the address of the broker this particular board uses, change it to the one you used above. Finally, there is a string describing the board, change it to whatever you like, it is currently only used for documentation purposes.
+
+Btw, if you leave the AP empty, the target will scan the Ether for access points and try to use those found, one by one, starting with the strongest, until a connection works. Of course, you will then need to set the password for the '' Hotspot in the *<Demo>DeviceList.py* file, and booting the board will take longer. Also, more RAM will be used. But hey, it will work, and having multiple access points for redundancy, or better coverage, has also its advantages. (Btw, right now, all access points must have the same password. Stay tuned...)
 
 Save the file, it should be OK for now. But we are not done yet with the configuration...
 
 Make a copy of file Newbie.py, name it Tutorial.py. That's to say, use the config name you defined in the <Demo>DeviceList.py file. Open this file in your editor, and change the following items:
-**C_DNS, C_Gateway, C_NetMask**: change if necessary so it fits your network
+**C_DNS, C_Gateway, C_Netmask**: change if necessary so it fits your network
 
-**C_Hotspot**: enter the name of your Hotspot. If you leave this empty, the target will scan the Ether for access points and try to use those found, one by one, starting with the strongest, until a connection works. Of course, you will then need to set the password for the '' Hotspot in the *<Demo>DeviceList.py* file, and booting the board will take longer. Also, more RAM will be used. But hey, it will work, and having multiple access points for redundancy, or better coverage, has also its advantages. (Btw, right now, all access points must have the same password. Stay tuned...)
+**C_Hotspot**: enter the name of your Hotspot. 
 
-**C_Handlers:** we will configure our IO here. Insert the following lines:
+**C_Handlers**: we will configure our IO here. Insert the following lines:
 ```python
 C_Handlers       = {
                      'DigitalOut': { 'Period' : 250,   'Params' : (('Led',    True ), ) }
