@@ -165,10 +165,13 @@ Next, we have the Parameters. These are different for all handlers, see the sour
 
 **C_Pins**:
 Finally, we need to define our pins:
-```
-# (Pin, direction: 0=IN | 1=OUT, Pull: 1=PULL_UP | None=None)
+```python
+# Pin  : ESP pin id, 
+# Mode : 0=IN | 1=OUT | 2=OPEN_DRAIN, 
+# Value: if  IN: 1=PULL_UP | None=None)
+#        if OUT: 0=OFF | 1=ON | None=leave (default state)
 C_Pins          = {
-                    'Led'  : (0,  1), 
+                    'Led'  : (0,  1, 0), 
                     'Wire' : (1,  0, None),
                   }
 ```
@@ -178,7 +181,82 @@ This dictionaries keys are the names of the Pins, as we used them above. The fir
 And this concludes the configuration of our target. Next, we need to get it on our target, and then we may finally play with it.
 
 ## Running it
+First, we need to prepare the board, i.e. flash it and upload the firmware. This is, of course, only possible via an USB connection, so we need to plug the board into the computer running Espynoza. Once we have done this, we execute the following command:
+```
+./Espynoza.py -t Tutorial -v --usb --flash
+```
+We pass the following parameters:
+-t Tutorial -> This is the name of the board, and _not_ the the configuration name
+-v -> verbose. We get some information about what the tool is currently doing
+--usb -> upload via USB.
+--flash -> the command, here telling the tool to flash and init the board
+
+Btw, if you want to see the commands and options the tool implements, simply type
+```
+./Espynoza.py --help
+```
+Flashing the target takes some time, so be patient.
+
+Once the flashing done, we are ready to transfer the base software. Make sure your Mosquitto instance is running, it will be used from now on. The first time, we still need to do this over USB, however, so here we go
+```
+./Espynoza.py -t Tutorial -v --usb --base
+```
+Again, this takes some time, but now, we get a more fine-grained status report. Please be aware that this step may fail from time to time, as ampy, the tool used for the serial/USB transfer is not very reliable. If you get an error, simply try again, normally it works on second or third attempt.
+
+
+The board is automatically rebooted when done. If your board has the blue status light, it will blink during boot, and stay out once a Access Point has been contacted. If you monitor your MQTT traffic, you will notice some messages coming from your board. Try is with this command (add username/password if necessary):
+```
+mosquitto_sub  -v -q 1 -t '#'
+```
+
+We're almost done now. For one thing, we will no longer need the USB connection, so you may connect your board to a simple power supply if you like.
+
+What still needs to be done is the uploading of the handlers. We do this with the following command:
+```
+./Espynoza.py -t Tutorial -v --handlers
+```
+Notice that we no longer use the --usb option, we are now 'over the air'. If you monitor MQTT traffic, you will also see _a lot_ of traffic, some strange stuff. This is your handlers, pre-compiled on your host. Python sources, with the exception of the main.py stub, is by default always pre-compiled, if you prefer the put the raw sources onto your target, for whatever reason, use the --source option.
+
+Oh, and if you want to reload the base software onto the target, you may do so OTA now.
+```
+./Espynoza.py -t Tutorial -v --base
+```
+You may change and upload the configuration with
+```
+./Espynoza.py -t Tutorial -v --configure
+```
+again OTA.
+
+Id you connected your Led correctly, it should blink now, at 2Hz. Try changing this frequency, change the configuration and upload it. The board should automatically reboot, and the tool should show the progress.
+
+Connecting your input wire to the 3V or GND pin should trigger some message sending. If so, input also works. Play around with the debouncing interval...
+
+But there is more: we can interactively play with the system, OTA:
+```
+./Espynoza.py -t Tutorial -v -c '1+2'
+```
+This returns the result, 3. And
+```
+./Espynoza.py -t Tutorial -v -c 'gc.mem_free()'
+```
+tells us how much memory is still available on the target. In fact, we may execute any legal Python statement using Espynoza.py. And this is also the way to interact with the IO drivers. Execute:
+```
+./Espynoza.py -t Tutorial -v -c "User.Handlers\['DigitalOut'\]\['Handler'\].set('Led',1)"
+```
+This will put the Led on. Well, it would, but the Led blinks. So, switch of the blinking in the configuration file Tutorial.py, realod the config, and try again. And passing 0 to the set function turns it of again.
+
+Have a loog at your MQTT output. You will find this line:
+```
+esp/SimpleIO/cmd User.Handlers\['DigitalOut'\]\['Handler'\].set('Led',1)
+```
+
+The topic is _esp/SimpleIO/cmd_ and the message is the Python code that puts the Led on. Sending this command using _any_ MQTT client will put the Led on. Do you have a MQTT client on your smartphone. Try it out. Perhaps not the most user-friendly way for IoT interactions, put I am sure you see the potential.
+
+Have a look at the file usr/DigitalOut.py. As you can see, set(...) is a method of a handler. There is also a toggle method. Try it out using Espynoza. Add your own method to DigitalOut, and try it. Or better, copy the handler to another file and change your config to use your version instead. then modify your private copy. This will avoid loosing your work when upgrading Espinoza.
+
 ## Troubleshooting
+To be completed 
+
 
 # Architecture overview
 ## File organization
