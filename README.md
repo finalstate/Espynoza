@@ -131,20 +131,19 @@ C_MQTTCredentials  =    {
 And finally, we need to add our target to the device descriptor. Copy one of the linesn and modify it like this:
 ```python
 C_DeviceDescriptor =    { 
-                           'Tutorial'  : ('192.168.1.42',   '192.168.1.99', 'Tutorial board'                        ),
-                           
-                           'SimpleIO'  : ('192.168.1.100',  '192.168.1.99', 'Digital I/O and single-wire temp'      ), #
+                           'Tutorial'  : ('Tutorial', '192.168.1.42',   '192.168.1.99', 'Tutorial board'                        ),
+                                                    , 
+                           'SimpleIO'  : ('SimpleIO', '192.168.1.100',  '192.168.1.99', 'Digital I/O and single-wire temp'      ),
                         ...
 ```                        
-Change the dictionaries Key tot he name you want ot give to your board. Find an address in your LAN that is not used, here, I used 192.168.1.42. The second quad.dot.address is the address of the broker this particular board uses, change it to the one you used above. Finally, there is a string describing the board, change it to whatever you like, it is currently only used for documentation purposes.
+Change the dictionaries yey to the name you want to give to your board. The associated parameter list begins with the name of the target configuration that we will define below. Here, we give it the same name as the target, but if you have several targets that use the same configuration (such as temperature sensors in different rooms), you may use different target board names, and reuse the same configuration file. Then, find an address in your LAN that is not used, here, I used 192.168.1.42. The second quad.dot.address is the address of the broker this particular board uses, change it to the one you used above. Finally, there is a string describing the board, change it to whatever you like, it is currently only used for documentation purposes.
 
 Save the file, it should be OK for now. But we are not done yet with the configuration...
 
-Make a copy of file Newbie.py, name it Tutorial.py. That's to say, use the board name you defined in the <Demo>DeviceList.py file. Open this file in your editor, and change the following items:
-
+Make a copy of file Newbie.py, name it Tutorial.py. That's to say, use the config name you defined in the <Demo>DeviceList.py file. Open this file in your editor, and change the following items:
 **C_DNS, C_Gateway, C_NetMask**: change if necessary so it fits your network
 
-**C_Hotspot**: enter the name of your Hotspot. If you leave this empty, the target will scan the Ether for Hotspots and try to use those found, one by one, starting with the strongest, until a connection works. Of course, you will then need to set the password for the '' Hotspot in the *<Demo>DeviceList.py* file, and booting the board will take longer. Also, more RAM will be used. But hey, it will work, and having multiple access points for redundancy, or better coverage, has also its advantages. (Btw, right now, all access points must have the same password. Stay tuned...)
+**C_Hotspot**: enter the name of your Hotspot. If you leave this empty, the target will scan the Ether for access points and try to use those found, one by one, starting with the strongest, until a connection works. Of course, you will then need to set the password for the '' Hotspot in the *<Demo>DeviceList.py* file, and booting the board will take longer. Also, more RAM will be used. But hey, it will work, and having multiple access points for redundancy, or better coverage, has also its advantages. (Btw, right now, all access points must have the same password. Stay tuned...)
 
 **C_Handlers:** we will configure our IO here. Insert the following lines:
 ```python

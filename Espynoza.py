@@ -97,8 +97,8 @@ class USB:
         
 ####################################################################################################
 
-def getHandlerList(p_DeviceName):
-    with open(f'etc/{p_DeviceName}.py', 'r') as l_Config:
+def getHandlerList(p_ConfigName):
+    with open(f'etc/{p_ConfigName}.py', 'r') as l_Config:
         l_ConfigFileContent = l_Config.read()
         exec(l_ConfigFileContent)
         
@@ -111,17 +111,17 @@ def prepareConfig(p_DeviceName, p_Target):
         l_ConfigFileContent = l_ConfigTemplate.read()
 
     l_ConfigFileContent = re.sub ("C_ClientId .*", f"C_ClientId = '{p_DeviceName}'", l_ConfigFileContent)
-    l_ConfigFileContent = re.sub ("C_IP .*",       f"C_IP       = '{p_Target[0] }'", l_ConfigFileContent)
-    l_ConfigFileContent = re.sub ("C_BrokerIP .*", f"C_BrokerIP = '{p_Target[1] }'", l_ConfigFileContent)
+    l_ConfigFileContent = re.sub ("C_IP .*",       f"C_IP       = '{p_Target[1] }'", l_ConfigFileContent)
+    l_ConfigFileContent = re.sub ("C_BrokerIP .*", f"C_BrokerIP = '{p_Target[2] }'", l_ConfigFileContent)
 
-    l_Broker      = p_Target[1]
+    l_Broker      = p_Target[2]
     l_Credentials = DeviceList.C_MQTTCredentials[l_Broker]
 
     l_ConfigFileContent += "\n"
     l_ConfigFileContent += f"C_BrokerUser     = '{l_Credentials[0]}'\n"
     l_ConfigFileContent += f"C_BrokerPassword = '{l_Credentials[1]}'\n"
     
-    
+    # now, this is UGLY
     for l_Line in l_ConfigFileContent:
         if 'C_Hotspot' in l_Line:
             break
@@ -339,7 +339,7 @@ if __name__ == '__main__':
     if g_Arguments.broker:
         l_Broker = g_Arguments.broker
     else:
-        l_Broker = DeviceList.C_DeviceDescriptor[g_Arguments.target][1]
+        l_Broker = DeviceList.C_DeviceDescriptor[g_Arguments.target][2]
         
     if g_Arguments.verbose:
         print (f'Broker: {l_Broker}')
@@ -420,7 +420,7 @@ if __name__ == '__main__':
         resetTarget()
 ###
     if g_Arguments.handlers:
-        l_HandlerNames = getHandlerList(g_Arguments.target)
+        l_HandlerNames = getHandlerList(DeviceList.C_DeviceDescriptor[g_Arguments.target][0])
         for l_HandlerName in l_HandlerNames:
             if g_Arguments.verbose:
                 print (f'Handler {l_HandlerName:20s}', end='', flush=True)
