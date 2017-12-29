@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 ####################################################################################################
 
-import json
 import time
 
 import paho.mqtt.client as mqtt
@@ -28,12 +27,7 @@ class MQTT:
         self.f_Client.connect(p_Broker, 1883,60) #
         
         self.f_Client.on_message = self.getResponse
-        l_Result = self.f_Client.subscribe(f'sensors/esp/{self.f_TargetName}/Hello', qos=0)  # Message: AccessPoint (FSSI)
-        l_Result = self.f_Client.subscribe(f'sensors/esp/{self.f_TargetName}/Bye',   qos=0)  # Message: either Crash (the will), or regular (remote reset by software) 
-        
-        l_Result = self.f_Client.subscribe(f'sensors/esp/{self.f_TargetName}/res',   qos=0)
-        l_Result = self.f_Client.subscribe(f'sensors/esp/{self.f_TargetName}/print', qos=0)
-        l_Result = self.f_Client.subscribe(f'sensors/esp/{self.f_TargetName}/data',  qos=0)
+        l_Result = self.f_Client.subscribe(f'sensors/esp/{self.f_TargetName}/#',  qos=0)
 #        print('Subscribe result: ', l_Result)
         self.f_Client.loop_start()
         
