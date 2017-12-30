@@ -116,8 +116,6 @@ class Blinker:
 ####################################################################################################
 
 class MQTT:
-    C_TimeStampLength = 4
-        
     def __init__(self, p_HelloMessage):
         self.f_Id     = Config.C_ClientId
         self.f_QoS    = Config.C_BrokerQoS
@@ -128,7 +126,7 @@ class MQTT:
                                                  user      = Config.C_BrokerUser, password = Config.C_BrokerPassword, 
                                                  keepalive = Config.C_WatchdogTO
                                                )
-            self.f_MQTTClient.set_last_will(topic=Config.C_BrokerPubPat.format(ClientId=self.f_Id, Name='Bye'), msg=b"\0\0\0\0Crash", qos=self.f_QoS) 
+            self.f_MQTTClient.set_last_will(topic=Config.C_BrokerPubPat.format(ClientId=self.f_Id, Name='Bye'), msg=b"TCrash", qos=self.f_QoS) 
             self.f_MQTTClient.connect()
             self.f_MQTTClient.set_callback(self.callback, g_Watchdog.touch)
             self.f_MQTTClient.subscribe(Config.C_BrokerSubPat.format(ClientId=self.f_Id), qos=self.f_QoS)
@@ -182,19 +180,18 @@ class MQTT:
         reboot()
         
     def publish(self, p_SubTopic, p_Data, p_Status=True):
+        def assembleData(p_Data, p_Status):
+            yield b'T' if p_Status else b'F'
+            if isinstance(p_Data, (bytes, bytearray)):
+                yield p_Data
+            else:
+                yield str(p_Data).encode()
+            
         g_Blinker.blink(1)
             
-        l_TimeStamp = time.ticks_us() if p_Status else 0
         try:
             l_Topic   = Config.C_BrokerPubPat.format(ClientId=self.f_Id, Name=p_SubTopic)
-            l_Message = bytearray(l_TimeStamp.to_bytes(MQTT.C_TimeStampLength, "big"))
-            
-            if isinstance(p_Data, (bytes, bytearray)):
-                l_Message += p_Data
-            else:
-                l_Message += str(p_Data).encode()
-            
-            return self.f_MQTTClient.publish(l_Topic, l_Message, qos=self.f_QoS)
+            return self.f_MQTTClient.publish(l_Topic, assembleData(p_Data, p_Status), qos=self.f_QoS)
         
         except OSError:
             reboot()
