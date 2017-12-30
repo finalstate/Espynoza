@@ -409,8 +409,9 @@ if __name__ == '__main__':
             print (f'\n{l_File:20s} : ', end='')
             sendFile(l_File, l_TargetName , l_Compile)
         
-        print ('\nClrlog  : ', end='')
-        g_MQTT.sendCommand('g_Log.clear()' )
+        if not g_USB:
+            print ('\nClrlog  : ', end='')
+            g_MQTT.sendCommand('g_Log.clear()' )
         
         resetTarget()
 ###

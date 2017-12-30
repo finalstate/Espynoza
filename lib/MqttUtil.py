@@ -9,11 +9,8 @@ import paho.mqtt.client as mqtt
 ####################################################################################################
 
 class MQTT:
-    C_TimeStampLength = 4
     
     ''' *All* payload data is in bytes.
-        Return value from target is prefixed with a timestamp (microseconds since device startup). 
-        The timestamp has a 0 value upon error.
     '''
     def __init__(self, p_TargetName, p_Broker, p_UserName=None, p_Password=None):
         self.resetState()
@@ -32,19 +29,19 @@ class MQTT:
         self.f_Client.loop_start()
         
     def resetState(self):
-        self.f_Hello     = False
-        self.f_Bye       = False
-        self.f_Done      = False
-        self.f_Payload   = None
-        self.f_Data      = bytearray()
-        self.f_Timestamp = True
+        self.f_Hello   = False
+        self.f_Bye     = False
+        self.f_Done    = False
+        self.f_Payload = None
+        self.f_Data    = bytearray()
+        self.f_Status  = True
     
     def __str__(self):
         return  f'''
                      {self.f_Done}     
                      {self.f_Payload}
                      {self.f_Data}     
-                     {self.f_Timestamp}       
+                     {self.f_Status}       
                  '''
                  
     def getData(self):
@@ -56,7 +53,7 @@ class MQTT:
             Sets the global state:
                 f_Data      : add the data returned by the target to a bytearray
                 f_Payload   : the payload of this message
-                f_Timestamp : a timestamp in microseconds giving the time since startup of the target. Is 0 in case of error.
+                f_Status    : True if no error resturned by target
                
             
             The global state should not be read by external functions, the return value of sendCommand should be used instead.
@@ -64,15 +61,8 @@ class MQTT:
             Text printed on remote host is printed to console, and is not part of either data or payload.
         '''
         
-#        print(f'''\nResponse: {p_Message.topic} -> {p_Message.payload} ''')
-        
-        try:
-            self.f_Timestamp, self.f_Payload = p_Message.payload.split(b':',1)
-            self.f_Timestamp = int(self.f_Timestamp)
-            
-        except ValueError:
-            self.f_Timestamp  = int.from_bytes(p_Message.payload[0:MQTT.C_TimeStampLength], 'big')
-            self.f_Payload = p_Message.payload[MQTT.C_TimeStampLength:]
+        self.f_Status  = p_Message.payload[0] == ord('T')
+        self.f_Payload = p_Message.payload[1:]
 
         if   p_Message.topic.endswith('print'):
             print(self.f_Payload.decode(), end='', flush=True)
@@ -93,7 +83,8 @@ class MQTT:
         elif p_Message.topic.endswith('res'):
             self.f_Done  = True
         else:
-            print (f'Unknown topic: {p_Message.topic}')
+            pass
+            # print (f'Unknown topic: {p_Message.topic}')
             
     def sendCommand(self, p_Command, p_Timeout=15):
         '''
@@ -119,7 +110,7 @@ class MQTT:
                 return (False, b'Timeout')
             
 #        print ('Payload', self.f_Payload)
-        return (self.f_Timestamp, self.f_Payload)
+        return (self.f_Status, self.f_Payload)
     
     def waitHello(self, p_Timeout=15):
         while (not self.f_Hello):
@@ -127,7 +118,7 @@ class MQTT:
             p_Timeout -= 0.1
             if p_Timeout <= 0:
                 return (False, b'Hello timeout')
-        return (self.f_Timestamp, self.f_Payload)
+        return (self.f_Status, self.f_Payload)
     
     def waitBye(self, p_Timeout=15):
         while (not self.f_Bye):
@@ -135,7 +126,7 @@ class MQTT:
             p_Timeout -= 0.1
             if p_Timeout <= 0:
                 return (False, b'Bye timeout')
-        return (self.f_Timestamp, self.f_Payload)
+        return (self.f_Status, self.f_Payload)
         
     def close(self):
         self.f_Client.disconnect()
