@@ -61,9 +61,7 @@ class MQTT:
             Text printed on remote host is printed to console, and is not part of either data or payload.
         '''
         
-#        print(f'''\nResponse: {p_Message.topic} -> {p_Message.payload} ''')
-        
-        self.f_Status  = p_Message.payload[0] == b'T'
+        self.f_Status  = p_Message.payload[0] == ord('T')
         self.f_Payload = p_Message.payload[1:]
 
         if   p_Message.topic.endswith('print'):
@@ -85,7 +83,8 @@ class MQTT:
         elif p_Message.topic.endswith('res'):
             self.f_Done  = True
         else:
-            print (f'Unknown topic: {p_Message.topic}')
+            pass
+            # print (f'Unknown topic: {p_Message.topic}')
             
     def sendCommand(self, p_Command, p_Timeout=15):
         '''
