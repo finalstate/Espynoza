@@ -26,22 +26,10 @@ def getResponse(p_Client, p_UserData, p_Message):
 
 #    print(f'''\nResponse: {p_Message.topic} -> {p_Message.payload} ''')
 
-    try:
-        l_Timestamp, l_Payload = p_Message.payload.split(b':',1)
-        l_Timestamp = int(l_Timestamp)
-        
-    except ValueError:
-        l_Timestamp  = int.from_bytes(p_Message.payload[0:C_TimeStampLength], 'big')
-        l_Payload    = p_Message.payload[C_TimeStampLength:]
+    l_Status  = p_Message.payload[0] == ord('T')
+    l_Payload = p_Message.payload[1:]
     
-    try:
-        l_Timestring = str(l_Timestamp)
-        l_Timestamp = ''
-        while l_Timestring != '':
-            l_Timestamp   = l_Timestring[-3:] + ',' + l_Timestamp
-            l_Timestring  = l_Timestring[:-3]
-        l_Timestamp = l_Timestamp[:-1]
-        
+    try:        
         l_Topic = p_Message.topic    
         
         l_TopicParts = l_Topic.split('/')
@@ -57,7 +45,7 @@ def getResponse(p_Client, p_UserData, p_Message):
         else:
             l_Datestamp = ''
         
-        print(f'''{l_Datestamp}{l_Target:10s} : {l_Timestamp:>12s} {l_Tag:15s}({l_Id:5s}) -> {l_Payload}''')
+        print(f'''{l_Datestamp}{l_Target:10s} : {l_Tag:15s}({l_Id:5s}) -> {l_Payload}''')
         
     except Exception as l_Exception:
         print (l_Exception)
