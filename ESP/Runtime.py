@@ -116,8 +116,6 @@ class Blinker:
 ####################################################################################################
 
 class MQTT:
-    C_TimeStampLength = 4
-        
     def __init__(self, p_HelloMessage):
         self.f_Id     = Config.C_ClientId
         self.f_QoS    = Config.C_BrokerQoS
@@ -183,11 +181,9 @@ class MQTT:
         
     def publish(self, p_SubTopic, p_Data, p_Status=True):
         g_Blinker.blink(1)
-            
-        l_TimeStamp = time.ticks_us() if p_Status else 0
         try:
             l_Topic   = Config.C_BrokerPubPat.format(ClientId=self.f_Id, Name=p_SubTopic)
-            l_Message = bytearray(l_TimeStamp.to_bytes(MQTT.C_TimeStampLength, "big"))
+            l_Message = bytearray(b'T' if p_Status else b'F')
             
             if isinstance(p_Data, (bytes, bytearray)):
                 l_Message += p_Data

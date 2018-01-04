@@ -5,7 +5,7 @@ C_LoopDelay      = 0.001
 C_ChunkSize      = 256*8
 
 # MQTT server     
-C_BrokerQoS      = 1
+C_BrokerQoS      = 0
 C_BrokerSubPat   = 'esp/{ClientId}/cmd'
 C_BrokerPubPat   = 'sensors/esp/{ClientId}/{Name}'
 
@@ -14,8 +14,7 @@ C_LogFile        = ''
 #C_LogFile        = '/Log.txt'
              
 C_Handlers       = {
-                     'DigitalIn' : { 'Period' :  2,   'Params'  : (('Rotary1',  1),
-                                                                   ('Rotary2',  1),
+                     'DigitalIn' : { 'Period' :  2,   'Params'  : (('Switch',  1),
                                                                   ),
                                    },
                      'DigitalOut': { 'Period' : 100,   'Params' : (('Led',  True),
@@ -29,8 +28,7 @@ C_Handlers       = {
 #        if OUT: 0=OFF | 1=ON | None=leave (default state)
 
 C_Pins           = {
-                      'Rotary1'   : ( 4, 0, 1),  
-                      'Rotary2'   : ( 5, 0, 1),  
+                      'Switch'   : ( 4, 0, 1),   
                       
                       'Led'       : (14, 1, 1),  
                    }

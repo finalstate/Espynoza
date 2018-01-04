@@ -36,23 +36,32 @@ Right now, the number of available handlers is limited to simple digital and ana
     * (more to come)
 
 * Software packages
+  * git
   * MicroPython
   * Mosquitto (and paho-mqtt)
   * ampy (from Adafruit)
   * esptool.py
   * (esp-open-sdk -- optional, needed to build custom runtimes, no support yet)
 
-## Preparation
-The following external software packages are needed to use Espinoza. Their installatin does not depend on whether you install the other packages from GitHub or from PyPi.
+## Install
 
-**MicroPython**: the MicroPython language files, and its compiler. Install this using Github, and build the compiler yourself (the pre-build one provided for download is notoriously out of date, and your code will not work with it):
+*Remark*: the following instructions worked for me, your mileage may vary. Please drop me a note if you have problems, I will try to help, and amend these instructions.
+
+**Espinoza**: clone Espynoza from GitHub using this command:
+```
+git clone https://github.com/finalstate/Espynoza.git
+```
+This will create a directory called Espynoza containig the Espynoza.py cli tool, a basic configuration file and a number of sub-directories.
+
+Moreover you will need to install the following packages to use Espynoza. Install them in some convenient place on your disk, not into the Espinoza directory.
+
+**MicroPython**: the MicroPython language files, and its compiler. Install this using Github, and build the compiler yourself (the pre-build one provided for download is notoriously out of date, and your code might not work with it):
 ```
 git clone https://github.com/micropython/micropython.git
 cd micropython/mpy-cross
 make
 ```
-
-This will create the mpy-cross compiler executable. Open the file EspyConfig.py in the Espynoza root directory. There you will find the following line:
+This will create the mpy-cross compiler executable. Open the file *EspyConfig.py* in the Espynoza root directory. There you will find the following line:
 ```
 C_MpyCross = './bin/mpy-cross'
 ```
@@ -98,10 +107,6 @@ sudo pip3 install adafruit-ampy
 ```
 sudo pip3 install paho-mqtt
 ```
-
-## Install with PIP
-
-ToBeDone
 
 # Tutorial
 Here is a simple tutorial to get you started with Espynoza. First, we will set up some basic hardware, and then install the software on it to get a feeling for how Espinoza works and what it can do for us.
@@ -155,7 +160,7 @@ Btw, if you leave the AP name empty, the target will scan the Ether for access p
 
 Save the file, it should be OK for now. But we are not done yet with the configuration...
 
-Make a copy of file Newbie.py, name it Tutorial.py. That's to say, use the config name you defined in the <Demo>DeviceList.py file. Open this file in your editor, and change the following items:
+Make a copy of file *Newbie.py*, name it *Tutorial.py*. That's to say, use the config name you defined in the *<Demo>DeviceList.py* file. Open this file in your editor, and change the following items:
 **C_Handlers**: we will configure our IO here. Insert the following lines:
 ```python
 C_Handlers = {
@@ -251,7 +256,7 @@ tells us how much memory is still available on the target. In fact, we may execu
 ```
 ./Espynoza.py -t Tutorial -v -c "User.Handlers['DigitalOut']['Handler'].set('Led',1)"
 ```
-This will put the Led on. Well, it would, but the Led blinks. So, switch of the blinking in the configuration file _Tutorial.py_, reload the config, and try again. And passing 0 to the set function turns it of again.
+This will put the Led on. Well, it would, but the Led blinks. So, switch of the blinking in the configuration file *Tutorial.py*, reload the config, and try again. And passing 0 to the set function turns it of again.
 
 Have a look at your MQTT output. You will find this line:
 ```
@@ -260,7 +265,7 @@ esp/SimpleIO/cmd User.Handlers['DigitalOut']['Handler'].set('Led',1)
 
 The topic is _esp/SimpleIO/cmd_ and the message is the Python code that puts the Led on. Sending this command using _any_ MQTT client will put the Led on. Do you have a MQTT client on your smartphone? Try it out. Perhaps not the most user-friendly way for IoT interactions, put I am sure you see the potential.
 
-Have a look at the file usr/DigitalOut.py. As you can see, set(...) is a method of the handler. There is also a toggle method. Try it out using Espynoza.py. Add your own method to DigitalOut, and try it. Or better, copy the handler to another file, change your config to use your version instead and then modify your private copy. This will avoid loosing your work when upgrading Espinoza.
+Have a look at the file *usr/DigitalOut.py*. As you can see, set(...) is a method of the handler. There is also a toggle method. Try it out using Espynoza.py. Add your own method to DigitalOut, and try it. Or better, copy the handler to another file, change your config to use your version instead and then modify your private copy. This will avoid loosing your work when upgrading Espinoza.
 
 ## Troubleshooting
 To be completed 
@@ -280,7 +285,6 @@ To be completed
 # Upcoming
 (help welcome :-) )
 
-* pip3 installer
 * custom firmware building support
 * https support for mqtt connections
 * cli commands: rename board, move target to another broker
