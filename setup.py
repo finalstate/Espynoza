@@ -1,19 +1,3 @@
-from distutils.core import setup
-
-setup (
-        name         = 'Espynoza',
-        packages     = ['Espynoza'],
-        version      = '0.1',
-        description  = 'Runtime and upload utilities for MicroPython/ESP8266 boards ',
-        author       = 'Rene Schmit',
-        author_email = 'rene.schmit@plaakert.lu',
-        url          = 'https://github.com/finalstate/Espynoza', 
-        download_url = 'https://github.com/finalstate/Espynoza/archive/0.1.tar.gz',
-        keywords     = ['esp8266', 'MicroPython', 'OverTheAir'],
-        classifiers  = [],
-      )
-
-
 """A setuptools based setup module.
 See:
 https://packaging.python.org/en/latest/distributing.html
@@ -157,7 +141,7 @@ setuptools.setup(
     # If using Python 2.6 or earlier, then these have to be included in
     # MANIFEST.in as well.
     package_data={  # Optional
-        'sample': ['package_data.dat'],
+        'Espynoza': ['ESP/*.py', 'etc/*.py', 'usr/*.py', 'var/*.py', 'README.py'],
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
@@ -165,7 +149,7 @@ setuptools.setup(
     # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files
     #
     # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
-    data_files=[('my_data', ['data/data_file'])],  # Optional
+#    data_files=[('my_data', ['data/data_file'])],  # Optional
 
     # To provide executable scripts, use entry points in preference to the
     # "scripts" keyword. Entry points provide cross-platform support and allow
@@ -176,7 +160,7 @@ setuptools.setup(
     # executes the function `main` from this package when invoked:
     entry_points={  # Optional
         'console_scripts': [
-            'sample=sample:main',
+            'Espynoza=Espynoza:main',
         ],
     },
 )
