@@ -5,7 +5,7 @@
 */**/*mpy
 
 # do not include, as it contains passwwords and other sensitive data. Include DemoDeviceList.py instead
-ESP/etc/DeviceList.py
+ESP/conf/DeviceList.py
 
 __pycache__
 */**/__pycache__
