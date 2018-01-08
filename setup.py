@@ -48,7 +48,8 @@ setuptools.setup(
     #
     #   py_modules=["my_module"],
     #
-    packages         = ['Espynoza',], # setuptools.find_packages(exclude=['bin']),
+#    packages         = ['Espynoza', 'ESP'],  
+    packages         = setuptools.find_packages(exclude=['bin',]),
 
     install_requires = ['esptool>=2.2','adafruit-ampy>=1.0.3', 'paho-mqtt>=1.3.1'],
     
@@ -59,13 +60,19 @@ setuptools.setup(
     # installed, specify them here.
 #    package_data     = {  
 #                         'ESP': [
-#                                       'ESP/*.py',
-#                                       'etc/*.py', 
-#                                       'usr/*.py', 
+#                                       'conf/DemoDeviceList.py',
+#                                       'conf/SimpleIO.py',
+#                                       'conf/SimpleIO2.py',
+#                                       'conf/Baro.py',
+#                                       'conf/Dimmer.py',
+#                                       'conf/Neo.py',
+#                                       'conf/Newbie.py',
+#                                       'handlers/*.py', 
+#                                       'rt/*.py', 
 #                                       'var/*.py',
 #                                     ],
 #                       },
-#    data_files       = [
+##    data_files       = [
 #                        ('',   [
 #                                'ESP/*.py',
 #                                'etc/*.py', 
