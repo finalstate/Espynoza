@@ -5,6 +5,7 @@
 import argparse
 import datetime
 import os
+import shutil
 import subprocess
 import sys
 import time
@@ -15,41 +16,53 @@ import ampy.pyboard
 import ampy.files
 
 ####################################################################################################
-
-import EspyConfig
-
-sys.path.append(os.path.join(sys.path[0], 'lib'))
-sys.path.append(os.path.join(sys.path[0], EspyConfig.C_ConfigDirectory)) # i.e. etc/
-
-try:
-    import DeviceList
-except:
-    import DemoDeviceList as DeviceList
-    
-
 ####################################################################################################
 
 C_ChunkSize     = 256*4
 
-C_BasicFiles    = [
-#                    'ESP/main.py',
-                    
-                    os.path.join(EspyConfig.C_TmpDirectory,'Config.py'),
-                    
-                    'ESP/Runtime.py',
-                    'ESP/mqtt.py',
-                    
-                    'ESP/LogToFile.py',
-                    'ESP/LogNone.py',
-                    
-                    'ESP/WifiHotspot.py',
-                    'ESP/WifiScan.py',
-                    
-                    'ESP/BaseHandler.py',
-                    
-                    'ESP/bme280.py',
-                  ]
+####################################################################################################
+####################################################################################################
 
+def getRuntimeFiles():
+    return [
+#               'ESP/main.py',
+            
+                os.path.join(EspyConfig.C_TmpDirectory,     'Config.py'     ),
+                                                                                
+                os.path.join(EspyConfig.C_RuntimeDirectory, 'Runtime.py'    ),
+                os.path.join(EspyConfig.C_RuntimeDirectory, 'mqtt.py'       ),
+                
+                os.path.join(EspyConfig.C_RuntimeDirectory, 'LogToFile.py'  ),
+                os.path.join(EspyConfig.C_RuntimeDirectory, 'LogNone.py'    ),
+                
+                os.path.join(EspyConfig.C_RuntimeDirectory, 'WifiHotspot.py'),
+                os.path.join(EspyConfig.C_RuntimeDirectory, 'WifiScan.py'   ),
+                
+                os.path.join(EspyConfig.C_RuntimeDirectory, 'BaseHandler.py'),
+                
+                os.path.join(EspyConfig.C_RuntimeDirectory, 'bme280.py'     ),
+           ]
+
+####################################################################################################
+
+def setupLocalProjectDir():
+    l_NewDirectoryName = g_Arguments.setup
+    if os.path.exists(l_NewDirectoryName):
+        sys.exit(f'Directory already exists.')
+    
+    l_EspinozaInstallDir = os.path.realpath(__file__).replace('Espynoza/Espynoza.py', '') # hack, change this
+    
+    if g_Arguments.verbose:
+        print(f'Setting up local directory "{l_NewDirectoryName}", copying from install directory "{l_EspinozaInstallDir}"')
+    
+    os.mkdir(l_NewDirectoryName)
+    os.chdir(l_NewDirectoryName)
+    
+    shutil.copytree(os.path.join(l_EspinozaInstallDir, 'ESP'), 'ESP')
+    
+    shutil.copyfile('ESP/DeviceList.py.sample',                                         'DeviceList.py')    
+    shutil.copyfile(os.path.join(l_EspinozaInstallDir,'Espynoza/EspyConfig.py.sample'), 'EspyConfig.py')    
+    
 ####################################################################################################
 ####################################################################################################
 
@@ -222,7 +235,8 @@ class MQTT:
 ####################################################################################################  
 
 def getHandlerList(p_ConfigName):
-    with open(f'etc/{p_ConfigName}.py', 'r') as l_Config:
+    l_ConfigFilename = os.path.join(EspyConfig.C_ConfigDirectory, f'{p_ConfigName}.py')
+    with open(l_ConfigFilename, 'r') as l_Config:
         l_ConfigFileContent = l_Config.read()
         exec(l_ConfigFileContent)
         
@@ -232,7 +246,8 @@ def getHandlerList(p_ConfigName):
 
 def prepareConfig(p_DeviceName,):   
     l_Target = DeviceList.C_DeviceDescriptor[p_DeviceName]
-    with open(f'etc/{p_DeviceName}.py', 'r') as l_ConfigTemplate:
+    l_ConfigFilename = os.path.join(EspyConfig.C_ConfigDirectory, f'{p_DeviceName}.py')
+    with open(l_ConfigFilename, 'r') as l_ConfigTemplate:
         l_ConfigFileContent = l_ConfigTemplate.read()
 
     l_Configs = [l_ConfigFileContent]
@@ -430,13 +445,20 @@ def flashESP8266():
    
 ####################################################################################################
 
-if __name__ == '__main__':
+def main():
+    global g_Arguments
+    global g_USB
+    global g_MQTT
+    
+    global EspyConfig
+    global DeviceList
+    
     l_ArgumentParser = argparse.ArgumentParser(description='Communicate with an ESP6288 board via MQTT')
     
     l_ArgumentParser.add_argument('-v', '--verbose',    required=False,  action='store_true',          help='Verbose user info')
     l_ArgumentParser.add_argument('-i', '--ignore',     required=False,  action='store_true',          help='ignore result sent by ESP'                                        )
                                                         
-    l_ArgumentParser.add_argument('-t', '--target',     required=True,   action='store' )
+    l_ArgumentParser.add_argument('-t', '--target',     required=False,  action='store' )
     l_ArgumentParser.add_argument('-u', '--usb',        nargs='?',       action='store', const='',     help='USB port to use. Tries to auto-detect if none given'              )
     l_ArgumentParser.add_argument('-b', '--broker',     required=False,  action='store', default=None, help='Use non-default broker to access ESP. Useful when changing broker')
     l_ArgumentParser.add_argument('-l', '--localfile',  required=False,  action='store',               help='Name of the local file to write to ESP'                           )
@@ -457,8 +479,19 @@ if __name__ == '__main__':
     l_ArgumentParser.add_argument(      '--flash',      required=False,  action='store_true',          help='Initialize chip using Esptool. Only in USB mode'                  )
                                                         
     l_ArgumentParser.add_argument(      '--rtc',        required=False,  action='store_true',          help='Update Real Time Clock on ESP.'                                   )
+
+    l_ArgumentParser.add_argument(      '--setup',      required=False,  action='store',               help='Create a local working directory.'                                )
     
     g_Arguments  = l_ArgumentParser.parse_args()    
+        
+    # Done 'manually' here, allowing for further changes, such as config file in user main directory
+    sys.path.append('.')
+    EspyConfig = __import__('EspyConfig')
+    DeviceList = __import__(EspyConfig.C_DeviceList)
+           
+    if g_Arguments.setup:
+        setupLocalProjectDir()
+        sys.exit()
         
     g_USB = USB(g_Arguments)
     if not g_USB.f_PyBoard:
@@ -526,12 +559,13 @@ if __name__ == '__main__':
         l_Compile = not g_Arguments.source
         prepareConfig(g_Arguments.target)
         
-        print (  'Main                 : ', end='')
-        sendFile('ESP/main.py', 'main.py', False) #never compile this
+        print (  'Main                   : ', end='')
+        l_MainFilename = os.path.join(EspyConfig.C_RuntimeDirectory, 'main.py')
+        sendFile(l_MainFilename, 'main.py', False) #never compile this
                
-        for l_File in C_BasicFiles:
+        for l_File in getRuntimeFiles():
             l_TargetName = l_File.rsplit('/',1)[1]
-            print (f'\n{l_File:20s} : ', end='')
+            print (f'\n{l_File:22s} : ', end='')
             sendFile(l_File, l_TargetName , l_Compile)
         
         if not g_USB:
@@ -569,3 +603,10 @@ if __name__ == '__main__':
 ###    
                         
     g_MQTT.close()
+
+####################################################################################################
+   
+if __name__ == '__main__':
+    main()  
+    
+####################################################################################################

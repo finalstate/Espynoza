@@ -1,22 +1,17 @@
-"""A setuptools based setup module.
-See:
-https://packaging.python.org/en/latest/distributing.html
-https://github.com/pypa/sampleproject
-"""
-
-import setuptools
 import codecs
 import os    
+import setuptools
 
-l_Here = os.path.abspath(os.path.dirname(__file__))
+try:
+    import pypandoc
+    l_LongDescription = pypandoc.convert('README.md', 'rst')
+except (IOError, ImportError):
+    l_LongDescription = open('README.md').read()
 
-# Get the long description from the README file
-with codecs.open(os.path.join(l_Here, 'README.md'), encoding='utf-8') as l_File:
-    l_LongDescription = l_File.read()
 
 setuptools.setup(
     name             = 'Espynoza',
-    version          = '0.1', 
+    version          = '0.1.17', 
                      
     description      = 'Runtime and upload utilities for MicroPython/ESP8266 boards', 
     long_description = l_LongDescription,
@@ -39,54 +34,18 @@ setuptools.setup(
 
     keywords         = 'IoT esp8266 MicroPython runtime uploader MQTT OverTheAir',
 
-    # You can just specify package directories manually here if your project is
-    # simple. Or you can use find_packages().
-    #
-    # Alternatively, if you just want to distribute a single Python file, use
-    # the `py_modules` argument instead as follows, which will expect a file
-    # called `my_module.py` to exist:
-    #
-    #   py_modules=["my_module"],
-    #
-#    packages         = ['Espynoza', 'ESP'],  
     packages         = setuptools.find_packages(exclude=['bin',]),
+    package_data     = {
+                        'ESP'      : [ 'DeviceList.py.sample',],
+                        'ESP.conf' : [ 'Config.py.sample',    ],
+                        'Espynoza' : [ 'EspyConfig.py.sample',],
+                       },
 
     install_requires = ['esptool>=2.2','adafruit-ampy>=1.0.3', 'paho-mqtt>=1.3.1'],
-    
-    # f-strings are used...
-    python_requires  = '>=3.6',
 
-    # If there are data files included in your packages that need to be
-    # installed, specify them here.
-#    package_data     = {  
-#                         'ESP': [
-#                                       'conf/DemoDeviceList.py',
-#                                       'conf/SimpleIO.py',
-#                                       'conf/SimpleIO2.py',
-#                                       'conf/Baro.py',
-#                                       'conf/Dimmer.py',
-#                                       'conf/Neo.py',
-#                                       'conf/Newbie.py',
-#                                       'handlers/*.py', 
-#                                       'rt/*.py', 
-#                                       'var/*.py',
-#                                     ],
-#                       },
-##    data_files       = [
-#                        ('',   [
-#                                'ESP/*.py',
-#                                'etc/*.py', 
-#                                'usr/*.py', 
-#                                'var/*.py',
-#                               ],
-#                        ),
-#                       ],
-    # To provide executable scripts, use entry points in preference to the
-    # "scripts" keyword. Entry points provide cross-platform support and allow
-    # `pip` to create the appropriate form of executable for the target
-    # platform.
-    #
-    # For example, the following would provide a command called `sample` which
-    # executes the function `main` from this package when invoked:
-    entry_points     = { 'console_scripts': ['Espynoza=Espynoza:main',],},
+    python_requires  = '>=3.6', # because f-strings are used...
+
+    entry_points     = { 'console_scripts': ['espynoza   = Espynoza.Espynoza:main',
+                                             'espylisten = Espynoza.EspyListen:main',
+                                            ],},
 )

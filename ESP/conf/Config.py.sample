@@ -17,8 +17,8 @@ C_LoopDelay      = 0.005
 C_BrokerIP       = '192.168.1.21'
 C_BrokerPort     = 0
 C_BrokerQoS      = 1
-C_BrokerSubPat   ="esp/{ClientId}/cmd"
-C_BrokerPubPat   ="sensors/esp/{ClientId}/{Name}"
+C_BrokerSubPat   = "esp/{ClientId}/cmd"
+C_BrokerPubPat   = "sensors/esp/{ClientId}/{Name}"
 
 # Log file (disable in prod. so not to overflow memory)
 C_LogFile        = ''

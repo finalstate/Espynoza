@@ -10,14 +10,13 @@ import time
 
 ##################################################
 
-sys.path.append(os.path.join(sys.path[0], 'etc'))    
-
 import paho.mqtt.client as mqtt
 
-try:
-    import DeviceList
-except:
-    import DemoDeviceList as DeviceList
+##################################################
+
+sys.path.append('.')
+
+import DeviceList
 
 ####################################################################################################
 
@@ -51,8 +50,10 @@ def getResponse(p_Client, p_UserData, p_Message):
         print (l_Exception)
         
 ####################################################################################################
-if __name__ == '__main__':
-    l_ArgumentParser = argparse.ArgumentParser(description='Communicate with an ESP6288 board via MQTT')
+
+def main():
+    global g_Arguments
+    l_ArgumentParser = argparse.ArgumentParser(description='Listen to communication between an ESP6288 board and an MQTT broker')
     
     l_ArgumentParser.add_argument('-v', '--verbose',    required=False,  action='store_true',          help='Verbose user info')
     l_ArgumentParser.add_argument('-d', '--datestamp',  required=False,  action='store_true',          help='Prepend datestamp')
@@ -80,3 +81,8 @@ if __name__ == '__main__':
 
     while True:
         time.sleep(0.01)
+
+####################################################################################################
+
+if __name__ == '__main__':
+    main()
