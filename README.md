@@ -109,7 +109,8 @@ sudo pip3 install paho-mqtt
 ```
 
 # Tutorial
-[Here](./doc/Tutorial) is a simple tutorial to get you started with Espynoza. First, we will set up some basic hardware, and then install the software on it to get a feeling for how Espinoza works and what it can do for us.
+[Here](Espynoza/doc/Tutorial.md) is a simple tutorial to get you started with Espynoza. First, we will set up some basic hardware, and then install the software on it to get a feeling for how Espinoza works and what it can do for us.
+ATTENTION: is currently out of date, to be reworked a.s.a.p.
 
 
 ## Troubleshooting
