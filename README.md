@@ -20,7 +20,8 @@ Special care has been been taken to use as little memory as possible on the targ
 (BTW, in case you wonder why some things are designed the way they are, I plan to write a web/database-based application to make using Espynoza easier. But first things first...)
 
 ## Version
-Current version is *0.1*, the initial commit.
+Current version is *0.2*, the 'big file shuffling' release.
+
 This version should be considered alpha quality, even though the code should work if Espynoza and all needed libraries and tools are installed correctly.
 Right now, the number of available handlers is limited to simple digital and analog IO, as well as some I2C or similar serial communication protocol devices. More will follow as soon as the basic code is stable.
 
@@ -110,6 +111,7 @@ sudo pip3 install paho-mqtt
 
 # Tutorial
 [Here](https://github.com/finalstate/Espynoza/blob/master/doc/Tutorial.md) is a simple tutorial to get you started with Espynoza. First, we will set up some basic hardware, and then install the software on it to get a feeling for how Espinoza works and what it can do for us.
+
 ATTENTION: is currently out of date, to be reworked a.s.a.p.
 
 
