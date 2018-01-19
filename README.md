@@ -284,6 +284,7 @@ To be completed
 
 # Upcoming
 (help welcome :-) )
+* DHCP address for target
 
 * custom firmware building support
 * https support for mqtt connections

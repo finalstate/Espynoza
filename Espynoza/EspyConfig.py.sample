@@ -6,5 +6,5 @@ C_TmpDirectory     = '/tmp/'
 
 C_DeviceList       = 'DeviceList'
 
-C_MpyCross         = './bin/mpy-cross'
+C_MpyCross         = 'mpy-cross'
 C_Esptool          = 'esptool.py'

@@ -5,11 +5,10 @@
 */**/*mpy
 
 DeviceList.py
+EspyConfig.py
 
 __pycache__
 */**/__pycache__
-
-bin/*
 
 dist/
 Espynoza.egg-info/

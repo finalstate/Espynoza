@@ -23,31 +23,40 @@ import DeviceList
 def getResponse(p_Client, p_UserData, p_Message):
     C_TimeStampLength = 4
 
-#    print(f'''\nResponse: {p_Message.topic} -> {p_Message.payload} ''')
+    print(f'''\nResponse: {p_Message.topic} -> {p_Message.payload} ''')
 
     l_Status  = p_Message.payload[0] == ord('T')
     l_Payload = p_Message.payload[1:]
     
     try:        
-        l_Topic = p_Message.topic    
-        
-        l_TopicParts = l_Topic.split('/')
-        
-        l_Target = l_TopicParts[2]
-        l_Id     = l_TopicParts[3]
-        l_Tag    = l_TopicParts[4]
-        
         l_Payload = l_Payload.decode()
-        
         if g_Arguments.datestamp:
             l_Datestamp = f'{datetime.datetime.now():%Y-%m-%d %H:%M:%S}  '
         else:
             l_Datestamp = ''
         
-        print(f'''{l_Datestamp}{l_Target:10s} : {l_Tag:15s}({l_Id:5s}) -> {l_Payload}''')
+        l_Topic = p_Message.topic    
+        
+        l_TopicParts = l_Topic.split('/')
+        
+        l_Target = l_TopicParts[2]
+        if l_TopicParts[3] == 'res':
+            if l_Payload != '':
+                print(f'''{l_Datestamp}{l_Target:10s} : Result -> {l_Payload}''')
+            else:
+                print(f'''{l_Datestamp}{l_Target:10s} : Result -> {'Success' if l_Payload == 'T' else 'Failure'} ''')
+                
+        if l_TopicParts[3] in ('Bye', 'Hello'):
+            if l_Payload != '':
+                print(f'''{l_Datestamp}{l_Target:10s} : Result -> {l_Payload}''')
+                 
+        else:
+            l_Id     = l_TopicParts[3]
+            l_Tag    = l_TopicParts[4]
+            print(f'''{l_Datestamp}{l_Target:10s} : {l_Tag:15s}({l_Id:5s}) -> {l_Payload}''')
         
     except Exception as l_Exception:
-        print (l_Exception)
+        print ('Response error: ', l_Exception)
         
 ####################################################################################################
 

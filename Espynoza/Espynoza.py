@@ -40,7 +40,7 @@ def getRuntimeFiles():
                 
                 os.path.join(EspyConfig.C_RuntimeDirectory, 'BaseHandler.py'),
                 
-                os.path.join(EspyConfig.C_RuntimeDirectory, 'bme280.py'     ),
+#                os.path.join(EspyConfig.C_RuntimeDirectory, 'bme280.py'     ),
            ]
 
 ####################################################################################################

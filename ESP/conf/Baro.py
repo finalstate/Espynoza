@@ -15,7 +15,6 @@ C_LogFile        = ''
              
 C_Handlers       = {
                      'DS18B20'   : { 'Period' : 1000,  'Params' : (('Temperature', 0.067, ), ) },
-                     'DigitalIn' : { 'Period' :  100,  'Params' : (('RadarIn',      100   ), ) },
                      'Pressure'  : { 'Period' : 1000,  'Params' : (('Temperature', 0.25), 
                                                                    ('Pressure',    0.25), 
                                                                   )
@@ -32,7 +31,5 @@ C_Pins          = {
                     
                     'SDA'     : ( 4,  1, None),  
                     'SCL'     : ( 5,  1, None),  
-
-                    'RadarIn' : (14,  0, None),  
                   }
         
