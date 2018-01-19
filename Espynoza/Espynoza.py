@@ -369,6 +369,7 @@ def sendFile(p_LocalFilename, p_RemoteFilename, p_Compile=True):
         
             l_Completed      = subprocess.run((EspyConfig.C_MpyCross , p_LocalFilename), stdout=subprocess.PIPE, universal_newlines=True)
             if l_Completed.returncode != 0:
+                print ('Error during compile: ',l_Completed)
                 return False
             
             l_CompiledFilename = p_LocalFilename.replace ('.py', '.mpy')

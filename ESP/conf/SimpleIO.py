@@ -30,6 +30,6 @@ C_Handlers       = {
 C_Pins           = {
                       'Switch'   : ( 4, 0, 1),   
                       
-                      'Led'       : (14, 1, 1),  
+                      'Led'      : (14, 1, 1),  
                    }
         
