@@ -2,7 +2,7 @@
 You need to get hold of an ESP6288 development board. Any board that has a USB port for uploading should work. We will, for the purpose of this tutorial, connect an LED to Port xxx to play with output lines, and a simple wire to Port yyy to try out input lines. Please note that we will use the Dnn numbering scheme as printed on (most?) boards when dealing with hardware, but will use the pin numbers as used in the official ESP documentation when writing software.
 
 ## Software configuration
-Lets try to keep this simple for now. EspyConfig.py should be OK for this tutorial if you dont have done anything special during installation. Lets go into the *etc/* sub-directory. There, we find a file called *DemoDeviceList.py*. (We may use it as is, or we may make a copy of it that we call *DeviceList.py*. The later will be used if it exists. Do this if you do not want to run into problems when pulling the newest Espinoza library).
+Let's try to keep this simple for now. EspyConfig.py should be OK for this tutorial if you have not done anything special during installation. Let's go into the *etc/* sub-directory. There, we find a file called *DemoDeviceList.py*. (We may use it as is, or we may make a copy of it that we call *DeviceList.py*. The later will be used if it exists. Do this if you do not want to run into problems when pulling the newest Espinoza library).
 
 Open this file in your preferred text editor. It contains the configuration of your IoT installation as a whole. Later on, we will see how an individual target device is configured. We will need to make some changes in this file, specifically the Wifi and MQTT settings, and the basic settings of our target devices.
 
