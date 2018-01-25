@@ -69,9 +69,9 @@ C_MpyCross = './bin/mpy-cross'
 You may either change this to point to your brand-new compiler, or create the bin sub-directory and create a symbolic link to the compiler in this directory (or use your own strategy, Espynoza is designed to be flexible).
 
 To start working, go to a directory of your choice, and execute
-???
+```
 espynoza --setup myinstallation
-???
+```
 This will create a directory _myinstallation_, and copy/create some files into in. Of course, you may name this directory whatever you like, and you may create more than one such directory, for instance if you want to maintain several distinct IoT setups.
 
 
@@ -119,6 +119,7 @@ sudo pip3 install paho-mqtt
 
 # Tutorial
 [Here](https://github.com/finalstate/Espynoza/blob/master/doc/Tutorial.md) is a simple tutorial to get you started with Espynoza. First, we will set up some basic hardware, and then install the software on it to get a feeling for how Espinoza works and what it can do for us.
+
 ATTENTION: is currently out of date, to be reworked a.s.a.p.
 
 
