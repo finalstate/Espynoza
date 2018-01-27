@@ -52,7 +52,7 @@ This is the easy way to install Espynoza. It will not only install Espynoza, but
 ```
 sudo pip3 install Espynoza
 ```
-_You absolutely need **python3.6** or later, as format-strings are used_
+_You absolutely need python3.6 or later, as format-strings are used_
 
 Additionnally, we need to install the Micropython package:
 
@@ -99,6 +99,7 @@ This will create a directory called Espynoza containig the Espynoza.py cli tool,
 Moreover you will need to install the following packages to use Espynoza. Install them in some convenient place on your disk, not into the Espinoza directory.
 
 **MicroPython**: see above
+
 **Mosquitto**: see above
 
 The next tools are normally installed automatically if using pip, here we need to do it manually if they are not yet installed
@@ -127,6 +128,7 @@ To be completed
 
 # Architecture overview
 _(to be written once things settle down somewhat)_
+
 ## File organization
 
 # Reference
@@ -139,11 +141,14 @@ _(to be written once things settle down somewhat)_
 
 # Upcoming
 (help welcome :-) )
+
 * DHCP address for target
+
 
 * custom firmware building support
 * https support for mqtt connections
 * cli commands: rename board, move target to another broker
 * tested/enhanced espylisten command (currently VERY alpha)
+
 
 * ESP32 support (if and when MicroPython supports the stuff needed)
