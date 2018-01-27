@@ -1,7 +1,6 @@
 # Remark:
 **Info will be completed a.s.a.p., but if you happen to stumble on this project, feel free to use.**
 
-
 Please be patient, doc. will be worked on before first public announcement
 
 # Introduction
@@ -53,6 +52,7 @@ This is the easy way to install Espynoza. It will not only install Espynoza, but
 ```
 pip3 install Espynoza
 ```
+_You absolutely need **python3.6** or later, as format-strings are used_
 
 Additionnally, we need to install the Micropython package:
 
@@ -74,19 +74,6 @@ espynoza --setup myinstallation
 ```
 This will create a directory _myinstallation_, and copy/create some files into in. Of course, you may name this directory whatever you like, and you may create more than one such directory, for instance if you want to maintain several distinct IoT setups.
 
-
-## Installing Espynoza from Github
-
-**Espinoza**: clone Espynoza from GitHub using this command:
-```
-git clone https://github.com/finalstate/Espynoza.git
-```
-This will create a directory called Espynoza containig the Espynoza.py cli tool, a basic configuration file and a number of sub-directories.
-
-Moreover you will need to install the following packages to use Espynoza. Install them in some convenient place on your disk, not into the Espinoza directory.
-
-**MicroPython**: see above
-
 **Mosquitto**: the MQTT broker used as a communication hub for Espynoza (and potentially many more sub-systems of your IoT installation.)
 
 If you use Debian or Ubuntu, the following should work:
@@ -101,6 +88,20 @@ apt-get install mosquitto mosquitto-clients
 Please refer to the mosquitto documentation for configuration and usage. The out-of-the-box config should be OK if you are happy without security settings...
 
 
+## Installing Espynoza from Github
+
+**Espinoza**: clone Espynoza from GitHub using this command:
+```
+git clone https://github.com/finalstate/Espynoza.git
+```
+This will create a directory called Espynoza containig the Espynoza.py cli tool, a basic configuration file and a number of sub-directories.
+
+Moreover you will need to install the following packages to use Espynoza. Install them in some convenient place on your disk, not into the Espinoza directory.
+
+**MicroPython**: see above
+**Mosquitto**: see above
+
+The next tools are normally installed automatically if using pip, here we need to do it manually if they are not yet installed
 **esptool**: This tool is used to flash the target flash memory, and to upload the MicroPython firmware
 ```
 sudo pip3 install esptool
@@ -120,14 +121,12 @@ sudo pip3 install paho-mqtt
 # Tutorial
 [Here](https://github.com/finalstate/Espynoza/blob/master/doc/Tutorial.md) is a simple tutorial to get you started with Espynoza. First, we will set up some basic hardware, and then install the software on it to get a feeling for how Espinoza works and what it can do for us.
 
-ATTENTION: is currently out of date, to be reworked a.s.a.p.
-
-
 ## Troubleshooting
 To be completed 
 
 
 # Architecture overview
+_(to be written once things settle down somewhat)_
 ## File organization
 
 # Reference
@@ -145,5 +144,6 @@ To be completed
 * custom firmware building support
 * https support for mqtt connections
 * cli commands: rename board, move target to another broker
+* tested/enhanced espylisten command (currently VERY alpha)
 
 * ESP32 support (if and when MicroPython supports the stuff needed)

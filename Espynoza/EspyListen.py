@@ -23,7 +23,7 @@ import DeviceList
 def getResponse(p_Client, p_UserData, p_Message):
     C_TimeStampLength = 4
 
-    print(f'''\nResponse: {p_Message.topic} -> {p_Message.payload} ''')
+#    print(f'''\nResponse: {p_Message.topic} -> {p_Message.payload} ''')
 
     l_Status  = p_Message.payload[0] == ord('T')
     l_Payload = p_Message.payload[1:]
