@@ -50,7 +50,7 @@ Right now, the number of available handlers is limited to simple digital and ana
 
 This is the easy way to install Espynoza. It will not only install Espynoza, but also the other necessary packages (except one, see below).
 ```
-pip3 install Espynoza
+sudo pip3 install Espynoza
 ```
 _You absolutely need **python3.6** or later, as format-strings are used_
 
