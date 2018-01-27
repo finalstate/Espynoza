@@ -133,7 +133,9 @@ _(to be written once things settle down somewhat)_
 
 # Reference
 
-# Contributing
+# Contributing, bug reports, ideas etc
+
+Contact me at finalstate@cassy.lu
 
 # Known issues
 - out of order file chunk transfers
