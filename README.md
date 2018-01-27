@@ -133,7 +133,7 @@ _(to be written once things settle down somewhat)_
 
 # Reference
 
-# Contributing, bug reports, ideas etc
+# Contributing, bug reports, comments, ideas e.t.c.
 
 Contact me at finalstate@cassy.lu
 
