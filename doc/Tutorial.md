@@ -142,7 +142,9 @@ tells us how much memory is still available on the target. In fact, we may execu
 ```
 espynoza.py -t Tutorial -v -c "User.Handlers['DigitalOut']['Handler'].set('Led',1)"
 ```
-This will put the Led on. Well, it would, but the Led blinks. So, switch of the blinking in the configuration file *Tutorial.py*, reload the config, and try again. And passing 0 to the set function turns it of again.
+This will put the Led on. Well, it would, but the Led blinks. So, switch of the blinking in the configuration file *Tutorial.py*, reload the config, and try again. And passing 0 to the set function turns it off again.
+
+The above command works like this: _User_ is an object in the Runtime that contains all user defined stuff. _DigitalOut_ is the name of the handler that we use to interact with one of the boards IOs. And _set_ is the name of a method in the handler that we want to call, we pass it the name of the Pin and the LEDs state.
 
 Have a look at your MQTT output. You will find this line:
 ```

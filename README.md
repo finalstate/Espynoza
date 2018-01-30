@@ -1,7 +1,5 @@
 # Remark:
-**Info will be completed a.s.a.p., but if you happen to stumble on this project, feel free to use.**
-
-Please be patient, doc. will be worked on before first public announcement
+Please be patient, documentation will be worked on. For the moment, refer to the [Tutorial](https://github.com/finalstate/Espynoza/blob/master/doc/Tutorial.md)
 
 # Introduction
 Espynoza is a Python framework for writing, configuring and managing applications on ESP8266 microcontroller boards.
