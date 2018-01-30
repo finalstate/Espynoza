@@ -44,9 +44,9 @@ def getResponse(p_Client, p_UserData, p_Message):
             if l_Payload != '':
                 print(f'''{l_Datestamp}{l_Target:10s} : Result -> {l_Payload}''')
             else:
-                print(f'''{l_Datestamp}{l_Target:10s} : Result -> {'Success' if l_Payload == 'T' else 'Failure'} ''')
+                print(f'''{l_Datestamp}{l_Target:10s} : Result -> {'Success' if l_Status else 'Failure'} ''')
                 
-        if l_TopicParts[3] in ('Bye', 'Hello'):
+        elif l_TopicParts[3] in ('Bye', 'Hello'):
             if l_Payload != '':
                 print(f'''{l_Datestamp}{l_Target:10s} : Result -> {l_Payload}''')
                  
