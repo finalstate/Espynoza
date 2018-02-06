@@ -142,12 +142,15 @@ Contact me at finalstate@cassy.lu
 # Upcoming
 (help welcome :-) )
 
+Top priority:
+* cli commands: rename board, move target to another broker
+
+More to come:
 * DHCP address for target
 
 
 * custom firmware building support
 * https support for mqtt connections
-* cli commands: rename board, move target to another broker
 * tested/enhanced espylisten command (currently VERY alpha)
 
 

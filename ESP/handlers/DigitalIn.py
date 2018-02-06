@@ -17,7 +17,7 @@ class Handler (BaseHandler.Handler):
     def __init__(self, p_Context):
         BaseHandler.Handler.__init__(self, p_Context)
 
-        # init to opposite of current state, and start time minus the daly. This will provoke the sending of the first value read
+        # init to opposite of current state, and start time minus the delay. This will provoke the sending of the first value read
         self.f_States = { l_PinName : (not self.f_Pins[l_PinName].value(), -l_Delay) for l_PinName, l_Delay in self.f_Params}
         
 #########################

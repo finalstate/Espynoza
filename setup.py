@@ -11,7 +11,7 @@ except (IOError, ImportError):
 
 setuptools.setup(
     name             = 'Espynoza',
-    version          = '0.2.3', 
+    version          = '0.2.4', 
                      
     description      = 'Runtime and upload utilities for MicroPython/ESP8266 boards', 
     long_description = l_LongDescription,
